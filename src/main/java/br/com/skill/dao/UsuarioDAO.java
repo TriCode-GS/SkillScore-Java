@@ -11,8 +11,8 @@ public class UsuarioDAO {
     
     public void adicionar(Usuario usuario) {
         String sql = "INSERT INTO TB_SS_USUARIO (ID_USUARIO, ID_EMPRESA, NOME, EMAIL, SENHA, "
-                + "TIPO_USUARIO, AREA_ATUACAO, NIVEL_SENIORIDADE) "
-                + "VALUES(SQ_SS_USUARIO.NEXTVAL, ?, ?, ?, ?, ?, ?, ?)";
+                + "TIPO_USUARIO, AREA_ATUACAO, NIVEL_SENIORIDADE, COMPETENCIAS) "
+                + "VALUES(SQ_SS_USUARIO.NEXTVAL, ?, ?, ?, ?, ?, ?, ?, ?)";
         
         try (Connection conexao = new ConnectionFactory().getConnection();
              PreparedStatement comandoDeInsercao = conexao.prepareStatement(sql)) {
@@ -29,6 +29,7 @@ public class UsuarioDAO {
             comandoDeInsercao.setString(5, usuario.getTipoUsuario());
             comandoDeInsercao.setString(6, usuario.getAreaAtuacao());
             comandoDeInsercao.setString(7, usuario.getNivelSenioridade());
+            comandoDeInsercao.setString(8, usuario.getCompetencias());
             
             comandoDeInsercao.execute();
         } catch (SQLException e) {
@@ -60,6 +61,7 @@ public class UsuarioDAO {
                 usuario.setTipoUsuario(rs.getString("TIPO_USUARIO"));
                 usuario.setAreaAtuacao(rs.getString("AREA_ATUACAO"));
                 usuario.setNivelSenioridade(rs.getString("NIVEL_SENIORIDADE"));
+                usuario.setCompetencias(rs.getString("COMPETENCIAS"));
                 usuarios.add(usuario);
             }
             
@@ -74,7 +76,7 @@ public class UsuarioDAO {
     public boolean atualizar(Usuario usuario) {
         String sql = "UPDATE TB_SS_USUARIO "
                 + "SET ID_EMPRESA = ?, NOME = ?, EMAIL = ?, SENHA = ?, TIPO_USUARIO = ?, "
-                + "AREA_ATUACAO = ?, NIVEL_SENIORIDADE = ? "
+                + "AREA_ATUACAO = ?, NIVEL_SENIORIDADE = ?, COMPETENCIAS = ? "
                 + "WHERE ID_USUARIO = ?";
         
         try (Connection conexao = new ConnectionFactory().getConnection();
@@ -96,7 +98,8 @@ public class UsuarioDAO {
             comandoDeAtualizacao.setString(5, usuario.getTipoUsuario());
             comandoDeAtualizacao.setString(6, usuario.getAreaAtuacao());
             comandoDeAtualizacao.setString(7, usuario.getNivelSenioridade());
-            comandoDeAtualizacao.setInt(8, usuario.getIdUsuario());
+            comandoDeAtualizacao.setString(8, usuario.getCompetencias());
+            comandoDeAtualizacao.setInt(9, usuario.getIdUsuario());
             
             int linhas = comandoDeAtualizacao.executeUpdate();
             return linhas > 0;
@@ -146,6 +149,7 @@ public class UsuarioDAO {
                     usuario.setTipoUsuario(rs.getString("TIPO_USUARIO"));
                     usuario.setAreaAtuacao(rs.getString("AREA_ATUACAO"));
                     usuario.setNivelSenioridade(rs.getString("NIVEL_SENIORIDADE"));
+                    usuario.setCompetencias(rs.getString("COMPETENCIAS"));
                     return usuario;
                 }
             }
@@ -179,6 +183,7 @@ public class UsuarioDAO {
                     usuario.setTipoUsuario(rs.getString("TIPO_USUARIO"));
                     usuario.setAreaAtuacao(rs.getString("AREA_ATUACAO"));
                     usuario.setNivelSenioridade(rs.getString("NIVEL_SENIORIDADE"));
+                    usuario.setCompetencias(rs.getString("COMPETENCIAS"));
                     return usuario;
                 }
             }
@@ -211,6 +216,7 @@ public class UsuarioDAO {
                     usuario.setTipoUsuario(rs.getString("TIPO_USUARIO"));
                     usuario.setAreaAtuacao(rs.getString("AREA_ATUACAO"));
                     usuario.setNivelSenioridade(rs.getString("NIVEL_SENIORIDADE"));
+                    usuario.setCompetencias(rs.getString("COMPETENCIAS"));
                     usuarios.add(usuario);
                 }
             }
@@ -245,6 +251,7 @@ public class UsuarioDAO {
                     usuario.setTipoUsuario(rs.getString("TIPO_USUARIO"));
                     usuario.setAreaAtuacao(rs.getString("AREA_ATUACAO"));
                     usuario.setNivelSenioridade(rs.getString("NIVEL_SENIORIDADE"));
+                    usuario.setCompetencias(rs.getString("COMPETENCIAS"));
                     return usuario;
                 }
             }

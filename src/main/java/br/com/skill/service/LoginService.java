@@ -17,16 +17,15 @@ public class LoginService {
     public void salvar(Login login) {
         validarLogin(login);
         
-        Usuario usuario = usuarioDAO.buscarPorId(login.getUsuario().getIdUsuario());
+        Usuario usuario = usuarioDAO.buscarPorId(login.getIdUsuario());
         if (usuario == null) {
             throw new IllegalArgumentException("Usuário não encontrado");
         }
-        login.setUsuario(usuario);
         
         Login loginExistente = loginDAO.buscarPorEmail(login.getEmail());
         if (loginExistente != null && 
             !loginExistente.getIdLogin().equals(login.getIdLogin()) &&
-            !loginExistente.getUsuario().getIdUsuario().equals(login.getUsuario().getIdUsuario())) {
+            !loginExistente.getIdUsuario().equals(login.getIdUsuario())) {
             throw new IllegalArgumentException("Email já cadastrado para outro login");
         }
         
@@ -45,11 +44,10 @@ public class LoginService {
             throw new IllegalArgumentException("Login não encontrado");
         }
         
-        Usuario usuario = usuarioDAO.buscarPorId(login.getUsuario().getIdUsuario());
+        Usuario usuario = usuarioDAO.buscarPorId(login.getIdUsuario());
         if (usuario == null) {
             throw new IllegalArgumentException("Usuário não encontrado");
         }
-        login.setUsuario(usuario);
         
         loginDAO.atualizar(login);
     }
@@ -117,7 +115,7 @@ public class LoginService {
             throw new IllegalArgumentException("Senha deve ter no mínimo 6 caracteres");
         }
         
-        if (login.getUsuario() == null || login.getUsuario().getIdUsuario() == null) {
+        if (login.getIdUsuario() == null) {
             throw new IllegalArgumentException("Usuário é obrigatório");
         }
     }

@@ -10,12 +10,13 @@ public class Usuario {
     private String tipoUsuario;
     private String areaAtuacao;
     private String nivelSenioridade;
+    private String competencias;
     
     public Usuario() {
     }
     
     public Usuario(Integer idUsuario, Integer idEmpresa, String nome, String email, String senha, 
-                   String tipoUsuario, String areaAtuacao, String nivelSenioridade) {
+                   String tipoUsuario, String areaAtuacao, String nivelSenioridade, String competencias) {
         this.idUsuario = idUsuario;
         this.idEmpresa = idEmpresa;
         this.nome = nome;
@@ -24,6 +25,7 @@ public class Usuario {
         this.tipoUsuario = tipoUsuario;
         this.areaAtuacao = areaAtuacao;
         this.nivelSenioridade = nivelSenioridade;
+        this.competencias = competencias;
     }
     
     public Integer getIdUsuario() {
@@ -88,5 +90,13 @@ public class Usuario {
     
     public void setNivelSenioridade(String nivelSenioridade) {
         this.nivelSenioridade = nivelSenioridade;
+    }
+    
+    public String getCompetencias() {
+        return competencias;
+    }
+    
+    public void setCompetencias(String competencias) {
+        this.competencias = competencias;
     }
 }

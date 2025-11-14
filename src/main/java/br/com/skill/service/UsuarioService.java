@@ -21,12 +21,11 @@ public class UsuarioService {
             throw new IllegalArgumentException("Email já cadastrado no sistema");
         }
         
-        if (usuario.getEmpresa() != null && usuario.getEmpresa().getIdEmpresa() != null) {
-            Empresa empresa = empresaDAO.buscarPorId(usuario.getEmpresa().getIdEmpresa());
+        if (usuario.getIdEmpresa() != null) {
+            Empresa empresa = empresaDAO.buscarPorId(usuario.getIdEmpresa());
             if (empresa == null) {
                 throw new IllegalArgumentException("Empresa não encontrada");
             }
-            usuario.setEmpresa(empresa);
         }
         
         usuarioDAO.adicionar(usuario);
@@ -45,12 +44,11 @@ public class UsuarioService {
             throw new IllegalArgumentException("Email já cadastrado para outro usuário");
         }
         
-        if (usuario.getEmpresa() != null && usuario.getEmpresa().getIdEmpresa() != null) {
-            Empresa empresa = empresaDAO.buscarPorId(usuario.getEmpresa().getIdEmpresa());
+        if (usuario.getIdEmpresa() != null) {
+            Empresa empresa = empresaDAO.buscarPorId(usuario.getIdEmpresa());
             if (empresa == null) {
                 throw new IllegalArgumentException("Empresa não encontrada");
             }
-            usuario.setEmpresa(empresa);
         }
         
         usuarioDAO.atualizar(usuario);

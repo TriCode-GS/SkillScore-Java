@@ -16,12 +16,11 @@ public class TrilhaService {
     public void salvar(Trilha trilha) {
         validarTrilha(trilha);
         
-        if (trilha.getUsuario() != null && trilha.getUsuario().getIdUsuario() != null) {
-            Usuario usuario = usuarioDAO.buscarPorId(trilha.getUsuario().getIdUsuario());
+        if (trilha.getIdUsuario() != null) {
+            Usuario usuario = usuarioDAO.buscarPorId(trilha.getIdUsuario());
             if (usuario == null) {
                 throw new IllegalArgumentException("Usuário não encontrado");
             }
-            trilha.setUsuario(usuario);
         }
         
         trilhaDAO.adicionar(trilha);
@@ -35,12 +34,11 @@ public class TrilhaService {
             throw new IllegalArgumentException("Trilha não encontrada");
         }
         
-        if (trilha.getUsuario() != null && trilha.getUsuario().getIdUsuario() != null) {
-            Usuario usuario = usuarioDAO.buscarPorId(trilha.getUsuario().getIdUsuario());
+        if (trilha.getIdUsuario() != null) {
+            Usuario usuario = usuarioDAO.buscarPorId(trilha.getIdUsuario());
             if (usuario == null) {
                 throw new IllegalArgumentException("Usuário não encontrado");
             }
-            trilha.setUsuario(usuario);
         }
         
         trilhaDAO.atualizar(trilha);
@@ -92,7 +90,7 @@ public class TrilhaService {
             throw new IllegalArgumentException("Nome da trilha deve ter no máximo 50 caracteres");
         }
         
-        if (trilha.getUsuario() == null || trilha.getUsuario().getIdUsuario() == null) {
+        if (trilha.getIdUsuario() == null) {
             throw new IllegalArgumentException("Usuário é obrigatório");
         }
     }

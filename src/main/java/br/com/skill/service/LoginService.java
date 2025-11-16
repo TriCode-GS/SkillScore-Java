@@ -17,15 +17,14 @@ public class LoginService {
     public void salvar(Login login) {
         validarLogin(login);
         
-        Usuario usuario = usuarioDAO.buscarPorId(login.getIdUsuario());
-        if (usuario == null) {
-            throw new IllegalArgumentException("Usuário não encontrado");
+        // Verifica se existe pelo menos um usuário no banco
+        List<Usuario> usuarios = usuarioDAO.obterTodosUsuarios();
+        if (usuarios == null || usuarios.isEmpty()) {
+            throw new IllegalArgumentException("Nenhum usuário encontrado. É necessário criar um usuário antes de criar o login.");
         }
         
         Login loginExistente = loginDAO.buscarPorEmail(login.getEmail());
-        if (loginExistente != null && 
-            !loginExistente.getIdLogin().equals(login.getIdLogin()) &&
-            !loginExistente.getIdUsuario().equals(login.getIdUsuario())) {
+        if (loginExistente != null) {
             throw new IllegalArgumentException("Email já cadastrado para outro login");
         }
         
@@ -113,10 +112,6 @@ public class LoginService {
         
         if (login.getSenha().length() < 6) {
             throw new IllegalArgumentException("Senha deve ter no mínimo 6 caracteres");
-        }
-        
-        if (login.getIdUsuario() == null) {
-            throw new IllegalArgumentException("Usuário é obrigatório");
         }
     }
 }

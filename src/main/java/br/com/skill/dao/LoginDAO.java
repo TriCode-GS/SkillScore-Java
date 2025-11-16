@@ -13,13 +13,19 @@ import br.com.skill.model.Login;
 public class LoginDAO {
     
     public void adicionar(Login login) {
+        Integer ultimoIdUsuario = obterUltimoIdUsuario();
+        
+        if (ultimoIdUsuario == null) {
+            throw new RuntimeException("Nenhum usuário encontrado no banco de dados");
+        }
+        
         String sql = "INSERT INTO TB_SS_LOGIN (ID_LOGIN, ID_USUARIO, EMAIL, SENHA, DATA_CRIACAO) "
-                + "VALUES(SQ_SS_LOGIN.NEXTVAL, SQ_SS_LOGIN.CURRVAL, ?, ?, ?)";
+                + "VALUES(SQ_SS_LOGIN.NEXTVAL, ?, ?, ?, ?)";
         
         try (Connection conexao = new ConnectionFactory().getConnection();
              PreparedStatement comandoDeInsercao = conexao.prepareStatement(sql)) {
             
-            comandoDeInsercao.setInt(1, login.getIdUsuario());
+            comandoDeInsercao.setInt(1, ultimoIdUsuario);
             comandoDeInsercao.setString(2, login.getEmail());
             comandoDeInsercao.setString(3, login.getSenha());
             
@@ -34,6 +40,24 @@ public class LoginDAO {
             System.out.println(e.getMessage());
             throw new RuntimeException(e);
         }
+    }
+    
+    private Integer obterUltimoIdUsuario() {
+        String sql = "SELECT MAX(ID_USUARIO) AS ULTIMO_ID FROM TB_SS_USUARIO";
+        
+        try (Connection conexao = new ConnectionFactory().getConnection();
+             PreparedStatement st = conexao.prepareStatement(sql)) {
+            
+            try (ResultSet rs = st.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("ULTIMO_ID");
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao obter último ID de usuário", e);
+        }
+        
+        return null;
     }
     
     

@@ -16,13 +16,6 @@ public class UsuarioService {
     public void salvar(Usuario usuario) {
         validarUsuario(usuario);
         
-        if (usuario.getIdEmpresa() != null) {
-            Empresa empresa = empresaDAO.buscarPorId(usuario.getIdEmpresa());
-            if (empresa == null) {
-                throw new IllegalArgumentException("Empresa não encontrada");
-            }
-        }
-        
         usuarioDAO.adicionar(usuario);
     }
     

@@ -7,7 +7,7 @@ import br.com.skill.model.Empresa;
 
 public class EmpresaService {
     
-    EmpresaDAO empresaDAO;
+    EmpresaDAO empresaDAO = new EmpresaDAO();
     
     public void salvar(Empresa empresa) {
         validarEmpresa(empresa);

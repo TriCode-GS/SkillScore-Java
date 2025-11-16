@@ -20,7 +20,7 @@ import jakarta.ws.rs.core.Response;
 @Consumes(MediaType.APPLICATION_JSON)
 public class UsuarioController {
     
-    UsuarioService usuarioService;
+    UsuarioService usuarioService = new UsuarioService();
     
     @GET
     public Response listarTodos() {

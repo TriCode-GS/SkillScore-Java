@@ -20,7 +20,7 @@ import jakarta.ws.rs.core.Response;
 @Consumes(MediaType.APPLICATION_JSON)
 public class QuestaoController {
     
-    QuestaoService questaoService;
+    QuestaoService questaoService = new QuestaoService();
     
     @GET
     public Response listarTodos() {

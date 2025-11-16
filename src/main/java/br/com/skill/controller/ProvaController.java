@@ -20,7 +20,7 @@ import jakarta.ws.rs.core.Response;
 @Consumes(MediaType.APPLICATION_JSON)
 public class ProvaController {
     
-    ProvaService provaService;
+    ProvaService provaService = new ProvaService();
     
     @GET
     public Response listarTodos() {

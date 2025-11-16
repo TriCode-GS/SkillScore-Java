@@ -8,9 +8,9 @@ import br.com.skill.model.Questao;
 
 public class QuestaoService {
     
-    QuestaoDAO questaoDAO;
+    QuestaoDAO questaoDAO = new QuestaoDAO();
     
-    ProvaDAO provaDAO;
+    ProvaDAO provaDAO = new ProvaDAO();
     
     public void salvar(Questao questao) {
         validarQuestao(questao);

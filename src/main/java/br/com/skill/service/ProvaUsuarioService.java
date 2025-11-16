@@ -10,11 +10,11 @@ import br.com.skill.model.ProvaUsuario;
 
 public class ProvaUsuarioService {
     
-    ProvaUsuarioDAO provaUsuarioDAO;
+    ProvaUsuarioDAO provaUsuarioDAO = new ProvaUsuarioDAO();
     
-    ProvaDAO provaDAO;
+    ProvaDAO provaDAO = new ProvaDAO();
     
-    UsuarioDAO usuarioDAO;
+    UsuarioDAO usuarioDAO = new UsuarioDAO();
     
     public void salvar(ProvaUsuario provaUsuario) {
         validarProvaUsuario(provaUsuario);

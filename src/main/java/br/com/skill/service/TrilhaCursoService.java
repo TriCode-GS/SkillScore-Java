@@ -9,11 +9,11 @@ import br.com.skill.model.TrilhaCurso;
 
 public class TrilhaCursoService {
     
-    TrilhaCursoDAO trilhaCursoDAO;
+    TrilhaCursoDAO trilhaCursoDAO = new TrilhaCursoDAO();
     
-    TrilhaDAO trilhaDAO;
+    TrilhaDAO trilhaDAO = new TrilhaDAO();
     
-    CursoDAO cursoDAO;
+    CursoDAO cursoDAO = new CursoDAO();
     
     public void salvar(TrilhaCurso trilhaCurso) {
         validarTrilhaCurso(trilhaCurso);

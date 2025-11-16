@@ -20,7 +20,7 @@ import jakarta.ws.rs.core.Response;
 @Consumes(MediaType.APPLICATION_JSON)
 public class EmpresaController {
     
-    EmpresaService empresaService;
+    EmpresaService empresaService = new EmpresaService();
     
     @GET
     public Response listarTodos() {

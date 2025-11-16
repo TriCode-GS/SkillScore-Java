@@ -21,7 +21,7 @@ import jakarta.ws.rs.core.Response;
 @Consumes(MediaType.APPLICATION_JSON)
 public class TrilhaController {
     
-    TrilhaService trilhaService;
+    TrilhaService trilhaService = new TrilhaService();
     
     @GET
     public Response listarTodos() {

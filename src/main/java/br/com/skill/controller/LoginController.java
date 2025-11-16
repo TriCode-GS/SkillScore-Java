@@ -21,7 +21,7 @@ import jakarta.ws.rs.core.Response;
 @Consumes(MediaType.APPLICATION_JSON)
 public class LoginController {
     
-    LoginService loginService;
+    LoginService loginService = new LoginService();
     
     @GET
     public Response listarTodos() {

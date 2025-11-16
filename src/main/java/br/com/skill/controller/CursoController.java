@@ -21,7 +21,7 @@ import jakarta.ws.rs.core.Response;
 @Consumes(MediaType.APPLICATION_JSON)
 public class CursoController {
     
-    CursoService cursoService;
+    CursoService cursoService = new CursoService();
     
     @GET
     public Response listarTodos() {

@@ -7,7 +7,7 @@ import br.com.skill.model.Curso;
 
 public class CursoService {
     
-    CursoDAO cursoDAO;
+    CursoDAO cursoDAO = new CursoDAO();
     
     public void salvar(Curso curso) {
         validarCurso(curso);

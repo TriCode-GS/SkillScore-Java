@@ -9,11 +9,11 @@ import br.com.skill.model.RespostaUsuario;
 
 public class RespostaUsuarioService {
     
-    RespostaUsuarioDAO respostaUsuarioDAO;
+    RespostaUsuarioDAO respostaUsuarioDAO = new RespostaUsuarioDAO();
     
-    ProvaUsuarioDAO provaUsuarioDAO;
+    ProvaUsuarioDAO provaUsuarioDAO = new ProvaUsuarioDAO();
     
-    QuestaoDAO questaoDAO;
+    QuestaoDAO questaoDAO = new QuestaoDAO();
     
     public void salvar(RespostaUsuario respostaUsuario) {
         validarRespostaUsuario(respostaUsuario);

@@ -9,9 +9,9 @@ import br.com.skill.model.Prova;
 
 public class ProvaService {
     
-    ProvaDAO provaDAO;
+    ProvaDAO provaDAO = new ProvaDAO();
     
-    TrilhaDAO trilhaDAO;
+    TrilhaDAO trilhaDAO = new TrilhaDAO();
     
     public void salvar(Prova prova) {
         validarProva(prova);

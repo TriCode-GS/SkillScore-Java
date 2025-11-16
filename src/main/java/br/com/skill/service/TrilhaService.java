@@ -9,9 +9,9 @@ import br.com.skill.model.Usuario;
 
 public class TrilhaService {
     
-    TrilhaDAO trilhaDAO;
+    TrilhaDAO trilhaDAO = new TrilhaDAO();
     
-    UsuarioDAO usuarioDAO;
+    UsuarioDAO usuarioDAO = new UsuarioDAO();
     
     public void salvar(Trilha trilha) {
         validarTrilha(trilha);

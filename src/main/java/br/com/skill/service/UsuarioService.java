@@ -9,9 +9,9 @@ import br.com.skill.model.Usuario;
 
 public class UsuarioService {
     
-    UsuarioDAO usuarioDAO;
+    UsuarioDAO usuarioDAO = new UsuarioDAO();
     
-    EmpresaDAO empresaDAO;
+    EmpresaDAO empresaDAO = new EmpresaDAO();
     
     public void salvar(Usuario usuario) {
         validarUsuario(usuario);

@@ -20,7 +20,7 @@ import jakarta.ws.rs.core.Response;
 @Consumes(MediaType.APPLICATION_JSON)
 public class TrilhaCursoController {
     
-    TrilhaCursoService trilhaCursoService;
+    TrilhaCursoService trilhaCursoService = new TrilhaCursoService();
     
     @GET
     public Response listarTodos() {

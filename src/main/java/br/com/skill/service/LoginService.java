@@ -10,9 +10,9 @@ import br.com.skill.model.Usuario;
 
 public class LoginService {
     
-    LoginDAO loginDAO;
+    LoginDAO loginDAO = new LoginDAO();
     
-    UsuarioDAO usuarioDAO;
+    UsuarioDAO usuarioDAO = new UsuarioDAO();
     
     public void salvar(Login login) {
         validarLogin(login);

@@ -28,12 +28,12 @@ public class CorsFilter implements ContainerResponseFilter {
 	        // 2. Se a origem existe e está na nossa lista de permitidas
 	        if (origin != null && ALLOWED_ORIGINS.contains(origin)) {
 	            // Define Access-Control-Allow-Origin para *A ORIGEM SOLICITANTE*
-	            responseContext.getHeaders().add("Access-Control-Allow-Origin", origin);
+	            responseContext.getHeaders().putSingle("Access-Control-Allow-Origin", origin);
 	            
-	            responseContext.getHeaders().add("Access-Control-Allow-Credentials", "true");
-	            responseContext.getHeaders().add("Access-Control-Allow-Headers", 
+	            responseContext.getHeaders().putSingle("Access-Control-Allow-Credentials", "true");
+	            responseContext.getHeaders().putSingle("Access-Control-Allow-Headers", 
 	                    "origin, content-type, accept, authorization");
-	            responseContext.getHeaders().add("Access-Control-Allow-Methods", 
+	            responseContext.getHeaders().putSingle("Access-Control-Allow-Methods", 
 	                    "GET, POST, PUT, DELETE, OPTIONS, HEAD");
 	        }
 	    }

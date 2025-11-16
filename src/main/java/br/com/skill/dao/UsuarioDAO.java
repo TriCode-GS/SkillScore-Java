@@ -11,7 +11,7 @@ import br.com.skill.model.Usuario;
 public class UsuarioDAO {
     
     public void adicionar(Usuario usuario) {
-        String sql = "INSERT INTO TB_SS_USUARIO (ID_USUARIO, ID_EMPRESA, NOME, NOME_USUARIO, "
+        String sql = "INSERT INTO TB_SS_USUARIO (ID_USUARIO, ID_EMPRESA,NOME_USUARIO, "
                 + "TIPO_USUARIO, AREA_ATUACAO, NIVEL_SENIORIDADE, COMPETENCIAS) "
                 + "VALUES(SQ_SS_USUARIO.NEXTVAL, ?, ?, ?, ?, ?, ?, ?)";
         
@@ -72,7 +72,7 @@ public class UsuarioDAO {
     
     public boolean atualizar(Usuario usuario) {
         String sql = "UPDATE TB_SS_USUARIO "
-                + "SET ID_EMPRESA = ?, NOME = ?, NOME_USUARIO = ?, TIPO_USUARIO = ?, "
+                + "SET ID_EMPRESA = ?, NOME_USUARIO = ?, TIPO_USUARIO = ?, "
                 + "AREA_ATUACAO = ?, NIVEL_SENIORIDADE = ?, COMPETENCIAS = ? "
                 + "WHERE ID_USUARIO = ?";
         

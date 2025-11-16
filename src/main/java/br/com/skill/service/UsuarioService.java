@@ -67,7 +67,7 @@ public class UsuarioService {
             throw new IllegalArgumentException("Usuário não pode ser nulo");
         }
         
-        if (usuario.getNome() == null || usuario.getNome().trim().isEmpty()) {
+        if (usuario.getNomeUsuario() == null || usuario.getNomeUsuario().trim().isEmpty()) {
             throw new IllegalArgumentException("Nome do usuário é obrigatório");
         }
     }

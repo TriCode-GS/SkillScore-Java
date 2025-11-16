@@ -1,11 +1,12 @@
 package br.com.skill.dao;
 
-import br.com.skill.model.Usuario;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+
+import br.com.skill.model.Usuario;
 
 public class UsuarioDAO {
     
@@ -23,12 +24,11 @@ public class UsuarioDAO {
                 comandoDeInsercao.setNull(1, java.sql.Types.INTEGER);
             }
             
-            comandoDeInsercao.setString(2, usuario.getNome());
-            comandoDeInsercao.setString(3, usuario.getNomeUsuario());
-            comandoDeInsercao.setString(4, usuario.getTipoUsuario());
-            comandoDeInsercao.setString(5, usuario.getAreaAtuacao());
-            comandoDeInsercao.setString(6, usuario.getNivelSenioridade());
-            comandoDeInsercao.setString(7, usuario.getCompetencias());
+            comandoDeInsercao.setString(2, usuario.getNomeUsuario());
+            comandoDeInsercao.setString(3, usuario.getTipoUsuario());
+            comandoDeInsercao.setString(4, usuario.getAreaAtuacao());
+            comandoDeInsercao.setString(5, usuario.getNivelSenioridade());
+            comandoDeInsercao.setString(6, usuario.getCompetencias());
             
             comandoDeInsercao.execute();
         } catch (SQLException e) {
@@ -54,7 +54,6 @@ public class UsuarioDAO {
                     usuario.setIdEmpresa(rs.getInt("ID_EMPRESA"));
                 }
                 
-                usuario.setNome(rs.getString("NOME"));
                 usuario.setNomeUsuario(rs.getString("NOME_USUARIO"));
                 usuario.setTipoUsuario(rs.getString("TIPO_USUARIO"));
                 usuario.setAreaAtuacao(rs.getString("AREA_ATUACAO"));
@@ -90,13 +89,12 @@ public class UsuarioDAO {
                 comandoDeAtualizacao.setNull(1, java.sql.Types.INTEGER);
             }
             
-            comandoDeAtualizacao.setString(2, usuario.getNome());
-            comandoDeAtualizacao.setString(3, usuario.getNomeUsuario());
-            comandoDeAtualizacao.setString(4, usuario.getTipoUsuario());
-            comandoDeAtualizacao.setString(5, usuario.getAreaAtuacao());
-            comandoDeAtualizacao.setString(6, usuario.getNivelSenioridade());
-            comandoDeAtualizacao.setString(7, usuario.getCompetencias());
-            comandoDeAtualizacao.setInt(8, usuario.getIdUsuario());
+            comandoDeAtualizacao.setString(2, usuario.getNomeUsuario());
+            comandoDeAtualizacao.setString(3, usuario.getTipoUsuario());
+            comandoDeAtualizacao.setString(4, usuario.getAreaAtuacao());
+            comandoDeAtualizacao.setString(5, usuario.getNivelSenioridade());
+            comandoDeAtualizacao.setString(6, usuario.getCompetencias());
+            comandoDeAtualizacao.setInt(7, usuario.getIdUsuario());
             
             int linhas = comandoDeAtualizacao.executeUpdate();
             return linhas > 0;
@@ -140,7 +138,6 @@ public class UsuarioDAO {
                         usuario.setIdEmpresa(rs.getInt("ID_EMPRESA"));
                     }
                     
-                    usuario.setNome(rs.getString("NOME"));
                     usuario.setNomeUsuario(rs.getString("NOME_USUARIO"));
                     usuario.setTipoUsuario(rs.getString("TIPO_USUARIO"));
                     usuario.setAreaAtuacao(rs.getString("AREA_ATUACAO"));
@@ -173,7 +170,6 @@ public class UsuarioDAO {
                     
                     usuario.setIdEmpresa(rs.getInt("ID_EMPRESA"));
                     
-                    usuario.setNome(rs.getString("NOME"));
                     usuario.setNomeUsuario(rs.getString("NOME_USUARIO"));
                     usuario.setTipoUsuario(rs.getString("TIPO_USUARIO"));
                     usuario.setAreaAtuacao(rs.getString("AREA_ATUACAO"));

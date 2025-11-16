@@ -4,7 +4,6 @@ public class Usuario {
     
     private Integer idUsuario;
     private Integer idEmpresa;
-    private String nome;
     private String nomeUsuario;
     private String tipoUsuario;
     private String areaAtuacao;
@@ -18,7 +17,6 @@ public class Usuario {
                    String tipoUsuario, String areaAtuacao, String nivelSenioridade, String competencias) {
         this.idUsuario = idUsuario;
         this.idEmpresa = idEmpresa;
-        this.nome = nome;
         this.nomeUsuario = nomeUsuario;
         this.tipoUsuario = tipoUsuario;
         this.areaAtuacao = areaAtuacao;
@@ -42,13 +40,6 @@ public class Usuario {
         this.idEmpresa = idEmpresa;
     }
     
-    public String getNome() {
-        return nome;
-    }
-    
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
     
     public String getNomeUsuario() {
         return nomeUsuario;

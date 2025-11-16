@@ -10,9 +10,9 @@ import java.util.ArrayList;
 public class UsuarioDAO {
     
     public void adicionar(Usuario usuario) {
-        String sql = "INSERT INTO TB_SS_USUARIO (ID_USUARIO, ID_EMPRESA, NOME, "
+        String sql = "INSERT INTO TB_SS_USUARIO (ID_USUARIO, ID_EMPRESA, NOME, NOME_USUARIO, "
                 + "TIPO_USUARIO, AREA_ATUACAO, NIVEL_SENIORIDADE, COMPETENCIAS) "
-                + "VALUES(SQ_SS_USUARIO.NEXTVAL, ?, ?, ?, ?, ?, ?)";
+                + "VALUES(SQ_SS_USUARIO.NEXTVAL, ?, ?, ?, ?, ?, ?, ?)";
         
         try (Connection conexao = new ConnectionFactory().getConnection();
              PreparedStatement comandoDeInsercao = conexao.prepareStatement(sql)) {
@@ -24,10 +24,11 @@ public class UsuarioDAO {
             }
             
             comandoDeInsercao.setString(2, usuario.getNome());
-            comandoDeInsercao.setString(3, usuario.getTipoUsuario());
-            comandoDeInsercao.setString(4, usuario.getAreaAtuacao());
-            comandoDeInsercao.setString(5, usuario.getNivelSenioridade());
-            comandoDeInsercao.setString(6, usuario.getCompetencias());
+            comandoDeInsercao.setString(3, usuario.getNomeUsuario());
+            comandoDeInsercao.setString(4, usuario.getTipoUsuario());
+            comandoDeInsercao.setString(5, usuario.getAreaAtuacao());
+            comandoDeInsercao.setString(6, usuario.getNivelSenioridade());
+            comandoDeInsercao.setString(7, usuario.getCompetencias());
             
             comandoDeInsercao.execute();
         } catch (SQLException e) {
@@ -54,6 +55,7 @@ public class UsuarioDAO {
                 }
                 
                 usuario.setNome(rs.getString("NOME"));
+                usuario.setNomeUsuario(rs.getString("NOME_USUARIO"));
                 usuario.setTipoUsuario(rs.getString("TIPO_USUARIO"));
                 usuario.setAreaAtuacao(rs.getString("AREA_ATUACAO"));
                 usuario.setNivelSenioridade(rs.getString("NIVEL_SENIORIDADE"));
@@ -71,7 +73,7 @@ public class UsuarioDAO {
     
     public boolean atualizar(Usuario usuario) {
         String sql = "UPDATE TB_SS_USUARIO "
-                + "SET ID_EMPRESA = ?, NOME = ?, TIPO_USUARIO = ?, "
+                + "SET ID_EMPRESA = ?, NOME = ?, NOME_USUARIO = ?, TIPO_USUARIO = ?, "
                 + "AREA_ATUACAO = ?, NIVEL_SENIORIDADE = ?, COMPETENCIAS = ? "
                 + "WHERE ID_USUARIO = ?";
         
@@ -89,11 +91,12 @@ public class UsuarioDAO {
             }
             
             comandoDeAtualizacao.setString(2, usuario.getNome());
-            comandoDeAtualizacao.setString(3, usuario.getTipoUsuario());
-            comandoDeAtualizacao.setString(4, usuario.getAreaAtuacao());
-            comandoDeAtualizacao.setString(5, usuario.getNivelSenioridade());
-            comandoDeAtualizacao.setString(6, usuario.getCompetencias());
-            comandoDeAtualizacao.setInt(7, usuario.getIdUsuario());
+            comandoDeAtualizacao.setString(3, usuario.getNomeUsuario());
+            comandoDeAtualizacao.setString(4, usuario.getTipoUsuario());
+            comandoDeAtualizacao.setString(5, usuario.getAreaAtuacao());
+            comandoDeAtualizacao.setString(6, usuario.getNivelSenioridade());
+            comandoDeAtualizacao.setString(7, usuario.getCompetencias());
+            comandoDeAtualizacao.setInt(8, usuario.getIdUsuario());
             
             int linhas = comandoDeAtualizacao.executeUpdate();
             return linhas > 0;
@@ -138,6 +141,7 @@ public class UsuarioDAO {
                     }
                     
                     usuario.setNome(rs.getString("NOME"));
+                    usuario.setNomeUsuario(rs.getString("NOME_USUARIO"));
                     usuario.setTipoUsuario(rs.getString("TIPO_USUARIO"));
                     usuario.setAreaAtuacao(rs.getString("AREA_ATUACAO"));
                     usuario.setNivelSenioridade(rs.getString("NIVEL_SENIORIDADE"));
@@ -170,6 +174,7 @@ public class UsuarioDAO {
                     usuario.setIdEmpresa(rs.getInt("ID_EMPRESA"));
                     
                     usuario.setNome(rs.getString("NOME"));
+                    usuario.setNomeUsuario(rs.getString("NOME_USUARIO"));
                     usuario.setTipoUsuario(rs.getString("TIPO_USUARIO"));
                     usuario.setAreaAtuacao(rs.getString("AREA_ATUACAO"));
                     usuario.setNivelSenioridade(rs.getString("NIVEL_SENIORIDADE"));

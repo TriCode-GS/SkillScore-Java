@@ -10,9 +10,9 @@ import java.util.ArrayList;
 public class UsuarioDAO {
     
     public void adicionar(Usuario usuario) {
-        String sql = "INSERT INTO TB_SS_USUARIO (ID_USUARIO, ID_EMPRESA, NOME, EMAIL, SENHA, "
+        String sql = "INSERT INTO TB_SS_USUARIO (ID_USUARIO, ID_EMPRESA, NOME, "
                 + "TIPO_USUARIO, AREA_ATUACAO, NIVEL_SENIORIDADE, COMPETENCIAS) "
-                + "VALUES(SQ_SS_USUARIO.NEXTVAL, ?, ?, ?, ?, ?, ?, ?, ?)";
+                + "VALUES(SQ_SS_USUARIO.NEXTVAL, ?, ?, ?, ?, ?, ?)";
         
         try (Connection conexao = new ConnectionFactory().getConnection();
              PreparedStatement comandoDeInsercao = conexao.prepareStatement(sql)) {
@@ -24,12 +24,10 @@ public class UsuarioDAO {
             }
             
             comandoDeInsercao.setString(2, usuario.getNome());
-            comandoDeInsercao.setString(3, usuario.getEmail());
-            comandoDeInsercao.setString(4, usuario.getSenha());
-            comandoDeInsercao.setString(5, usuario.getTipoUsuario());
-            comandoDeInsercao.setString(6, usuario.getAreaAtuacao());
-            comandoDeInsercao.setString(7, usuario.getNivelSenioridade());
-            comandoDeInsercao.setString(8, usuario.getCompetencias());
+            comandoDeInsercao.setString(3, usuario.getTipoUsuario());
+            comandoDeInsercao.setString(4, usuario.getAreaAtuacao());
+            comandoDeInsercao.setString(5, usuario.getNivelSenioridade());
+            comandoDeInsercao.setString(6, usuario.getCompetencias());
             
             comandoDeInsercao.execute();
         } catch (SQLException e) {
@@ -56,8 +54,6 @@ public class UsuarioDAO {
                 }
                 
                 usuario.setNome(rs.getString("NOME"));
-                usuario.setEmail(rs.getString("EMAIL"));
-                usuario.setSenha(rs.getString("SENHA"));
                 usuario.setTipoUsuario(rs.getString("TIPO_USUARIO"));
                 usuario.setAreaAtuacao(rs.getString("AREA_ATUACAO"));
                 usuario.setNivelSenioridade(rs.getString("NIVEL_SENIORIDADE"));
@@ -75,7 +71,7 @@ public class UsuarioDAO {
     
     public boolean atualizar(Usuario usuario) {
         String sql = "UPDATE TB_SS_USUARIO "
-                + "SET ID_EMPRESA = ?, NOME = ?, EMAIL = ?, SENHA = ?, TIPO_USUARIO = ?, "
+                + "SET ID_EMPRESA = ?, NOME = ?, TIPO_USUARIO = ?, "
                 + "AREA_ATUACAO = ?, NIVEL_SENIORIDADE = ?, COMPETENCIAS = ? "
                 + "WHERE ID_USUARIO = ?";
         
@@ -93,13 +89,11 @@ public class UsuarioDAO {
             }
             
             comandoDeAtualizacao.setString(2, usuario.getNome());
-            comandoDeAtualizacao.setString(3, usuario.getEmail());
-            comandoDeAtualizacao.setString(4, usuario.getSenha());
-            comandoDeAtualizacao.setString(5, usuario.getTipoUsuario());
-            comandoDeAtualizacao.setString(6, usuario.getAreaAtuacao());
-            comandoDeAtualizacao.setString(7, usuario.getNivelSenioridade());
-            comandoDeAtualizacao.setString(8, usuario.getCompetencias());
-            comandoDeAtualizacao.setInt(9, usuario.getIdUsuario());
+            comandoDeAtualizacao.setString(3, usuario.getTipoUsuario());
+            comandoDeAtualizacao.setString(4, usuario.getAreaAtuacao());
+            comandoDeAtualizacao.setString(5, usuario.getNivelSenioridade());
+            comandoDeAtualizacao.setString(6, usuario.getCompetencias());
+            comandoDeAtualizacao.setInt(7, usuario.getIdUsuario());
             
             int linhas = comandoDeAtualizacao.executeUpdate();
             return linhas > 0;
@@ -144,8 +138,6 @@ public class UsuarioDAO {
                     }
                     
                     usuario.setNome(rs.getString("NOME"));
-                    usuario.setEmail(rs.getString("EMAIL"));
-                    usuario.setSenha(rs.getString("SENHA"));
                     usuario.setTipoUsuario(rs.getString("TIPO_USUARIO"));
                     usuario.setAreaAtuacao(rs.getString("AREA_ATUACAO"));
                     usuario.setNivelSenioridade(rs.getString("NIVEL_SENIORIDADE"));
@@ -160,39 +152,6 @@ public class UsuarioDAO {
         return null;
     }
     
-    public Usuario buscarPorEmail(String email) {
-        String sql = "SELECT * FROM TB_SS_USUARIO WHERE EMAIL = ?";
-        
-        try (Connection conexao = new ConnectionFactory().getConnection();
-             PreparedStatement st = conexao.prepareStatement(sql)) {
-            
-            st.setString(1, email);
-            
-            try (ResultSet rs = st.executeQuery()) {
-                if (rs.next()) {
-                    Usuario usuario = new Usuario();
-                    usuario.setIdUsuario(rs.getInt("ID_USUARIO"));
-                    
-                    if (rs.getObject("ID_EMPRESA") != null) {
-                        usuario.setIdEmpresa(rs.getInt("ID_EMPRESA"));
-                    }
-                    
-                    usuario.setNome(rs.getString("NOME"));
-                    usuario.setEmail(rs.getString("EMAIL"));
-                    usuario.setSenha(rs.getString("SENHA"));
-                    usuario.setTipoUsuario(rs.getString("TIPO_USUARIO"));
-                    usuario.setAreaAtuacao(rs.getString("AREA_ATUACAO"));
-                    usuario.setNivelSenioridade(rs.getString("NIVEL_SENIORIDADE"));
-                    usuario.setCompetencias(rs.getString("COMPETENCIAS"));
-                    return usuario;
-                }
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException("Erro ao buscar usuário por email", e);
-        }
-        
-        return null;
-    }
     
     public ArrayList<Usuario> buscarPorEmpresa(Integer idEmpresa) {
         ArrayList<Usuario> usuarios = new ArrayList<>();
@@ -211,8 +170,6 @@ public class UsuarioDAO {
                     usuario.setIdEmpresa(rs.getInt("ID_EMPRESA"));
                     
                     usuario.setNome(rs.getString("NOME"));
-                    usuario.setEmail(rs.getString("EMAIL"));
-                    usuario.setSenha(rs.getString("SENHA"));
                     usuario.setTipoUsuario(rs.getString("TIPO_USUARIO"));
                     usuario.setAreaAtuacao(rs.getString("AREA_ATUACAO"));
                     usuario.setNivelSenioridade(rs.getString("NIVEL_SENIORIDADE"));
@@ -227,40 +184,6 @@ public class UsuarioDAO {
         return usuarios;
     }
     
-    public Usuario buscarPorEmailESenha(String email, String senha) {
-        String sql = "SELECT * FROM TB_SS_USUARIO WHERE EMAIL = ? AND SENHA = ?";
-        
-        try (Connection conexao = new ConnectionFactory().getConnection();
-             PreparedStatement st = conexao.prepareStatement(sql)) {
-            
-            st.setString(1, email);
-            st.setString(2, senha);
-            
-            try (ResultSet rs = st.executeQuery()) {
-                if (rs.next()) {
-                    Usuario usuario = new Usuario();
-                    usuario.setIdUsuario(rs.getInt("ID_USUARIO"));
-                    
-                    if (rs.getObject("ID_EMPRESA") != null) {
-                        usuario.setIdEmpresa(rs.getInt("ID_EMPRESA"));
-                    }
-                    
-                    usuario.setNome(rs.getString("NOME"));
-                    usuario.setEmail(rs.getString("EMAIL"));
-                    usuario.setSenha(rs.getString("SENHA"));
-                    usuario.setTipoUsuario(rs.getString("TIPO_USUARIO"));
-                    usuario.setAreaAtuacao(rs.getString("AREA_ATUACAO"));
-                    usuario.setNivelSenioridade(rs.getString("NIVEL_SENIORIDADE"));
-                    usuario.setCompetencias(rs.getString("COMPETENCIAS"));
-                    return usuario;
-                }
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException("Erro ao buscar usuário por email e senha", e);
-        }
-        
-        return null;
-    }
     
     public boolean idExiste(Integer idUsuario) {
         String sql = "SELECT 1 FROM TB_SS_USUARIO WHERE ID_USUARIO = ?";

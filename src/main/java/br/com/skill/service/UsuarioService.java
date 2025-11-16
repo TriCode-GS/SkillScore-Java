@@ -16,11 +16,6 @@ public class UsuarioService {
     public void salvar(Usuario usuario) {
         validarUsuario(usuario);
         
-        Usuario usuarioExistente = usuarioDAO.buscarPorEmail(usuario.getEmail());
-        if (usuarioExistente != null && !usuarioExistente.getIdUsuario().equals(usuario.getIdUsuario())) {
-            throw new IllegalArgumentException("Email já cadastrado no sistema");
-        }
-        
         if (usuario.getIdEmpresa() != null) {
             Empresa empresa = empresaDAO.buscarPorId(usuario.getIdEmpresa());
             if (empresa == null) {
@@ -37,11 +32,6 @@ public class UsuarioService {
         Usuario usuarioExistente = usuarioDAO.buscarPorId(usuario.getIdUsuario());
         if (usuarioExistente == null) {
             throw new IllegalArgumentException("Usuário não encontrado");
-        }
-        
-        Usuario usuarioComEmail = usuarioDAO.buscarPorEmail(usuario.getEmail());
-        if (usuarioComEmail != null && !usuarioComEmail.getIdUsuario().equals(usuario.getIdUsuario())) {
-            throw new IllegalArgumentException("Email já cadastrado para outro usuário");
         }
         
         if (usuario.getIdEmpresa() != null) {
@@ -75,29 +65,8 @@ public class UsuarioService {
         return usuarioDAO.obterTodosUsuarios();
     }
     
-    public Usuario buscarPorEmail(String email) {
-        return usuarioDAO.buscarPorEmail(email);
-    }
-    
     public List<Usuario> buscarPorEmpresa(Integer idEmpresa) {
         return usuarioDAO.buscarPorEmpresa(idEmpresa);
-    }
-    
-    public Usuario autenticar(String email, String senha) {
-        if (email == null || email.trim().isEmpty()) {
-            throw new IllegalArgumentException("Email é obrigatório");
-        }
-        
-        if (senha == null || senha.trim().isEmpty()) {
-            throw new IllegalArgumentException("Senha é obrigatória");
-        }
-        
-        Usuario usuario = usuarioDAO.buscarPorEmailESenha(email, senha);
-        if (usuario == null) {
-            throw new IllegalArgumentException("Email ou senha inválidos");
-        }
-        
-        return usuario;
     }
     
     private void validarUsuario(Usuario usuario) {
@@ -107,22 +76,6 @@ public class UsuarioService {
         
         if (usuario.getNome() == null || usuario.getNome().trim().isEmpty()) {
             throw new IllegalArgumentException("Nome do usuário é obrigatório");
-        }
-        
-        if (usuario.getEmail() == null || usuario.getEmail().trim().isEmpty()) {
-            throw new IllegalArgumentException("Email é obrigatório");
-        }
-        
-        if (!usuario.getEmail().contains("@")) {
-            throw new IllegalArgumentException("Email inválido");
-        }
-        
-        if (usuario.getSenha() == null || usuario.getSenha().trim().isEmpty()) {
-            throw new IllegalArgumentException("Senha é obrigatória");
-        }
-        
-        if (usuario.getSenha().length() < 6) {
-            throw new IllegalArgumentException("Senha deve ter no mínimo 6 caracteres");
         }
     }
 }

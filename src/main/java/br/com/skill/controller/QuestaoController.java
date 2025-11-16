@@ -2,8 +2,8 @@ package br.com.skill.controller;
 
 import java.util.List;
 
-import br.com.skill.model.Usuario;
-import br.com.skill.service.UsuarioService;
+import br.com.skill.model.Questao;
+import br.com.skill.service.QuestaoService;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
@@ -15,21 +15,21 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
-@Path("/usuarios")
+@Path("/questoes")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-public class UsuarioController {
+public class QuestaoController {
     
-    UsuarioService usuarioService;
+    QuestaoService questaoService;
     
     @GET
     public Response listarTodos() {
         try {
-            List<Usuario> usuarios = usuarioService.listarTodos();
-            return Response.ok(usuarios).build();
+            List<Questao> questoes = questaoService.listarTodos();
+            return Response.ok(questoes).build();
         } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity("Erro ao listar usuários: " + e.getMessage()).build();
+                    .entity("Erro ao listar questões: " + e.getMessage()).build();
         }
     }
     
@@ -37,56 +37,56 @@ public class UsuarioController {
     @Path("/{id}")
     public Response buscarPorId(@PathParam("id") Integer id) {
         try {
-            Usuario usuario = usuarioService.buscarPorId(id);
-            return Response.ok(usuario).build();
+            Questao questao = questaoService.buscarPorId(id);
+            return Response.ok(questao).build();
         } catch (IllegalArgumentException e) {
             return Response.status(Response.Status.NOT_FOUND)
                     .entity(e.getMessage()).build();
         } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity("Erro ao buscar usuário: " + e.getMessage()).build();
+                    .entity("Erro ao buscar questão: " + e.getMessage()).build();
         }
     }
     
     @GET
-    @Path("/empresa/{idEmpresa}")
-    public Response buscarPorEmpresa(@PathParam("idEmpresa") Integer idEmpresa) {
+    @Path("/prova/{idProva}")
+    public Response buscarPorProva(@PathParam("idProva") Integer idProva) {
         try {
-            List<Usuario> usuarios = usuarioService.buscarPorEmpresa(idEmpresa);
-            return Response.ok(usuarios).build();
+            List<Questao> questoes = questaoService.buscarPorProva(idProva);
+            return Response.ok(questoes).build();
         } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity("Erro ao buscar usuários: " + e.getMessage()).build();
+                    .entity("Erro ao buscar questões: " + e.getMessage()).build();
         }
     }
     
     @POST
-    public Response salvar(Usuario usuario) {
+    public Response salvar(Questao questao) {
         try {
-            usuarioService.salvar(usuario);
-            return Response.status(Response.Status.CREATED).entity(usuario).build();
+            questaoService.salvar(questao);
+            return Response.status(Response.Status.CREATED).entity(questao).build();
         } catch (IllegalArgumentException e) {
             return Response.status(Response.Status.BAD_REQUEST)
                     .entity(e.getMessage()).build();
         } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity("Erro ao salvar usuário: " + e.getMessage()).build();
+                    .entity("Erro ao salvar questão: " + e.getMessage()).build();
         }
     }
     
     @PUT
     @Path("/{id}")
-    public Response atualizar(@PathParam("id") Integer id, Usuario usuario) {
+    public Response atualizar(@PathParam("id") Integer id, Questao questao) {
         try {
-            usuario.setIdUsuario(id);
-            usuarioService.atualizar(usuario);
-            return Response.ok(usuario).build();
+            questao.setIdQuestao(id);
+            questaoService.atualizar(questao);
+            return Response.ok(questao).build();
         } catch (IllegalArgumentException e) {
             return Response.status(Response.Status.BAD_REQUEST)
                     .entity(e.getMessage()).build();
         } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity("Erro ao atualizar usuário: " + e.getMessage()).build();
+                    .entity("Erro ao atualizar questão: " + e.getMessage()).build();
         }
     }
     
@@ -94,14 +94,15 @@ public class UsuarioController {
     @Path("/{id}")
     public Response deletar(@PathParam("id") Integer id) {
         try {
-            usuarioService.deletar(id);
+            questaoService.deletar(id);
             return Response.noContent().build();
         } catch (IllegalArgumentException e) {
             return Response.status(Response.Status.NOT_FOUND)
                     .entity(e.getMessage()).build();
         } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity("Erro ao deletar usuário: " + e.getMessage()).build();
+                    .entity("Erro ao deletar questão: " + e.getMessage()).build();
         }
     }
 }
+

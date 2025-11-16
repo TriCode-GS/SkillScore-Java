@@ -1,6 +1,5 @@
 package br.com.skill.dao;
 
-import br.com.skill.model.Login;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -9,11 +8,13 @@ import java.sql.Types;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
+import br.com.skill.model.Login;
+
 public class LoginDAO {
     
     public void adicionar(Login login) {
         String sql = "INSERT INTO TB_SS_LOGIN (ID_LOGIN, ID_USUARIO, EMAIL, SENHA, DATA_CRIACAO) "
-                + "VALUES(SQ_SS_LOGIN.NEXTVAL, ?, ?, ?, ?)";
+                + "VALUES(SQ_SS_LOGIN.NEXTVAL, SQ_SS_LOGIN.CURRVAL, ?, ?, ?)";
         
         try (Connection conexao = new ConnectionFactory().getConnection();
              PreparedStatement comandoDeInsercao = conexao.prepareStatement(sql)) {
@@ -34,6 +35,7 @@ public class LoginDAO {
             throw new RuntimeException(e);
         }
     }
+    
     
     public ArrayList<Login> obterTodosLogins() {
         ArrayList<Login> logins = new ArrayList<>();

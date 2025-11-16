@@ -13,7 +13,7 @@ public class UsuarioDAO {
     public void adicionar(Usuario usuario) {
         String sql = "INSERT INTO TB_SS_USUARIO (ID_USUARIO, ID_EMPRESA,NOME_USUARIO, "
                 + "TIPO_USUARIO, AREA_ATUACAO, NIVEL_SENIORIDADE, COMPETENCIAS) "
-                + "VALUES(SQ_SS_USUARIO.NEXTVAL, ?, ?, ?, ?, ?, ?, ?)";
+                + "VALUES(SQ_SS_USUARIO.NEXTVAL, ?, ?, ?, ?, ?, ?)";
         
         try (Connection conexao = new ConnectionFactory().getConnection();
              PreparedStatement comandoDeInsercao = conexao.prepareStatement(sql)) {

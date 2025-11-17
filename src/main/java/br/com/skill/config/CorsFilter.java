@@ -10,31 +10,30 @@ import jakarta.ws.rs.ext.Provider;
 
 @Provider
 public class CorsFilter implements ContainerResponseFilter {
-    
-	private static final List<String> ALLOWED_ORIGINS = Arrays.asList(
-	        "http://localhost:3000",
-	        "http://localhost:4200",
-	        "http://localhost:5173",
-	        "http://localhost:8000",
-	        "http://localhost:5174"
-	    );
 
-	    @Override
-	    public void filter(ContainerRequestContext requestContext, ContainerResponseContext responseContext) {
-	        
-	        // 1. Pega a origem da requisição
-	        String origin = requestContext.getHeaderString("Origin");
+    private static final List<String> ALLOWED_ORIGINS = Arrays.asList(
+        "http://localhost:3000",
+        "http://localhost:4200",
+        "http://localhost:5173",
+        "http://localhost:8000",
+        "http://localhost:5174",
+        "https://skillscore.vercel.app",
+        "https://skillscore-java.onrender.com"
+    );
 
-	        // 2. Se a origem existe e está na nossa lista de permitidas
-	        if (origin != null && ALLOWED_ORIGINS.contains(origin)) {
-	            // Define Access-Control-Allow-Origin para *A ORIGEM SOLICITANTE*
-	            responseContext.getHeaders().add("Access-Control-Allow-Origin", origin);
-	            
-	            responseContext.getHeaders().add("Access-Control-Allow-Credentials", "true");
-	            responseContext.getHeaders().add("Access-Control-Allow-Headers", 
-	                    "origin, content-type, accept, authorization");
-	            responseContext.getHeaders().add("Access-Control-Allow-Methods", 
-	                    "GET, POST, PUT, DELETE, OPTIONS, HEAD");
-	        }
-	    }
+    @Override
+    public void filter(ContainerRequestContext requestContext, ContainerResponseContext responseContext) {
+        
+        String origin = requestContext.getHeaderString("Origin");
+
+        if (origin != null && ALLOWED_ORIGINS.contains(origin)) {
+            responseContext.getHeaders().add("Access-Control-Allow-Origin", origin);
+            responseContext.getHeaders().add("Access-Control-Allow-Credentials", "true");
+            responseContext.getHeaders().add("Access-Control-Allow-Headers",
+                    "Origin, Content-Type, Accept, Authorization, X-Requested-With");
+            responseContext.getHeaders().add("Access-Control-Allow-Methods",
+                    "GET, POST, PUT, DELETE, OPTIONS, HEAD");
+            responseContext.getHeaders().add("Access-Control-Max-Age", "3600");
+        }
+    }
 }

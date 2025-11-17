@@ -186,6 +186,39 @@ public class UsuarioDAO {
     }
     
     
+    public ArrayList<Usuario> buscarPorTipoUsuario(String tipoUsuario) {
+        ArrayList<Usuario> usuarios = new ArrayList<>();
+        String sql = "SELECT * FROM TB_SS_USUARIO WHERE TIPO_USUARIO = ?";
+        
+        try (Connection conexao = new ConnectionFactory().getConnection();
+             PreparedStatement st = conexao.prepareStatement(sql)) {
+            
+            st.setString(1, tipoUsuario);
+            
+            try (ResultSet rs = st.executeQuery()) {
+                while (rs.next()) {
+                    Usuario usuario = new Usuario();
+                    usuario.setIdUsuario(rs.getInt("ID_USUARIO"));
+                    
+                    if (rs.getObject("ID_EMPRESA") != null) {
+                        usuario.setIdEmpresa(rs.getInt("ID_EMPRESA"));
+                    }
+                    
+                    usuario.setNomeUsuario(rs.getString("NOME_USUARIO"));
+                    usuario.setTipoUsuario(rs.getString("TIPO_USUARIO"));
+                    usuario.setAreaAtuacao(rs.getString("AREA_ATUACAO"));
+                    usuario.setNivelSenioridade(rs.getString("NIVEL_SENIORIDADE"));
+                    usuario.setCompetencias(rs.getString("COMPETENCIAS"));
+                    usuarios.add(usuario);
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao buscar usuários por tipo", e);
+        }
+        
+        return usuarios;
+    }
+    
     public boolean idExiste(Integer idUsuario) {
         String sql = "SELECT 1 FROM TB_SS_USUARIO WHERE ID_USUARIO = ?";
         

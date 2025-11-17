@@ -60,6 +60,18 @@ public class UsuarioController {
         }
     }
     
+    @GET
+    @Path("/administradores-emp")
+    public Response listarAdministradoresEmp() {
+        try {
+            List<Usuario> usuarios = usuarioService.buscarAdministradoresEmp();
+            return Response.ok(usuarios).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("Erro ao listar administradores da empresa: " + e.getMessage()).build();
+        }
+    }
+    
     @POST
     public Response salvar(Usuario usuario) {
         try {

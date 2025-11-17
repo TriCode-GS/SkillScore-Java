@@ -62,6 +62,10 @@ public class UsuarioService {
         return usuarioDAO.buscarPorEmpresa(idEmpresa);
     }
     
+    public List<Usuario> buscarAdministradoresEmp() {
+        return usuarioDAO.buscarPorTipoUsuario("ADMINISTRADOR EMP");
+    }
+    
     private void validarUsuario(Usuario usuario) {
         if (usuario == null) {
             throw new IllegalArgumentException("Usuário não pode ser nulo");

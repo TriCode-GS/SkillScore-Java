@@ -8,16 +8,18 @@ public class Login {
     private Integer idUsuario;
     private String email;
     private String senha;
+    private String tipoLogin;
     private LocalDate dataCriacao;
     
     public Login() {
     }
     
-    public Login(Integer idLogin, Integer idUsuario, String email, String senha, LocalDate dataCriacao) {
+    public Login(Integer idLogin, Integer idUsuario, String email, String senha, String tipoLogin, LocalDate dataCriacao) {
         this.idLogin = idLogin;
         this.idUsuario = idUsuario;
         this.email = email;
         this.senha = senha;
+        this.tipoLogin = tipoLogin;
         this.dataCriacao = dataCriacao;
     }
     
@@ -51,6 +53,14 @@ public class Login {
     
     public void setSenha(String senha) {
         this.senha = senha;
+    }
+    
+    public String getTipoLogin() {
+        return tipoLogin;
+    }
+    
+    public void setTipoLogin(String tipoLogin) {
+        this.tipoLogin = tipoLogin;
     }
     
     public LocalDate getDataCriacao() {

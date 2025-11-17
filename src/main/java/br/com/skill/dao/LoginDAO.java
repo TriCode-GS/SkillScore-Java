@@ -19,8 +19,8 @@ public class LoginDAO {
             throw new RuntimeException("Nenhum usuário encontrado no banco de dados");
         }
         
-        String sql = "INSERT INTO TB_SS_LOGIN (ID_LOGIN, ID_USUARIO, EMAIL, SENHA, DATA_CRIACAO) "
-                + "VALUES(SQ_SS_LOGIN.NEXTVAL, ?, ?, ?, ?)";
+        String sql = "INSERT INTO TB_SS_LOGIN (ID_LOGIN, ID_USUARIO, EMAIL, SENHA, TIPO_LOGIN, DATA_CRIACAO) "
+                + "VALUES(SQ_SS_LOGIN.NEXTVAL, ?, ?, ?, ?, ?)";
         
         try (Connection conexao = new ConnectionFactory().getConnection();
              PreparedStatement comandoDeInsercao = conexao.prepareStatement(sql)) {
@@ -28,11 +28,12 @@ public class LoginDAO {
             comandoDeInsercao.setInt(1, ultimoIdUsuario);
             comandoDeInsercao.setString(2, login.getEmail());
             comandoDeInsercao.setString(3, login.getSenha());
+            comandoDeInsercao.setString(4, login.getTipoLogin());
             
             if (login.getDataCriacao() != null) {
-                comandoDeInsercao.setObject(4, login.getDataCriacao());
+                comandoDeInsercao.setObject(5, login.getDataCriacao());
             } else {
-                comandoDeInsercao.setNull(4, Types.DATE);
+                comandoDeInsercao.setNull(5, Types.DATE);
             }
             
             comandoDeInsercao.execute();
@@ -78,6 +79,7 @@ public class LoginDAO {
                 
                 login.setEmail(rs.getString("EMAIL"));
                 login.setSenha(rs.getString("SENHA"));
+                login.setTipoLogin(rs.getString("TIPO_LOGIN"));
                 
                 if (rs.getObject("DATA_CRIACAO") != null) {
                     login.setDataCriacao(rs.getObject("DATA_CRIACAO", LocalDate.class));
@@ -96,7 +98,7 @@ public class LoginDAO {
     
     public boolean atualizar(Login login) {
         String sql = "UPDATE TB_SS_LOGIN "
-                + "SET ID_USUARIO = ?, EMAIL = ?, SENHA = ?, DATA_CRIACAO = ? "
+                + "SET ID_USUARIO = ?, EMAIL = ?, SENHA = ?, TIPO_LOGIN = ?, DATA_CRIACAO = ? "
                 + "WHERE ID_LOGIN = ?";
         
         try (Connection conexao = new ConnectionFactory().getConnection();
@@ -109,14 +111,15 @@ public class LoginDAO {
             comandoDeAtualizacao.setInt(1, login.getIdUsuario());
             comandoDeAtualizacao.setString(2, login.getEmail());
             comandoDeAtualizacao.setString(3, login.getSenha());
+            comandoDeAtualizacao.setString(4, login.getTipoLogin());
             
             if (login.getDataCriacao() != null) {
-                comandoDeAtualizacao.setObject(4, login.getDataCriacao());
+                comandoDeAtualizacao.setObject(5, login.getDataCriacao());
             } else {
-                comandoDeAtualizacao.setNull(4, Types.DATE);
+                comandoDeAtualizacao.setNull(5, Types.DATE);
             }
             
-            comandoDeAtualizacao.setInt(5, login.getIdLogin());
+            comandoDeAtualizacao.setInt(6, login.getIdLogin());
             
             int linhas = comandoDeAtualizacao.executeUpdate();
             return linhas > 0;

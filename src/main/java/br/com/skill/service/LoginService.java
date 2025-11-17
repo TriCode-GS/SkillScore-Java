@@ -17,11 +17,6 @@ public class LoginService {
     public void salvar(Login login) {
         validarLogin(login);
         
-        // Verifica se existe pelo menos um usuário no banco
-        List<Usuario> usuarios = usuarioDAO.obterTodosUsuarios();
-        if (usuarios == null || usuarios.isEmpty()) {
-            throw new IllegalArgumentException("Nenhum usuário encontrado. É necessário criar um usuário antes de criar o login.");
-        }
         
         Login loginExistente = loginDAO.buscarPorEmail(login.getEmail());
         if (loginExistente != null) {
@@ -113,5 +108,20 @@ public class LoginService {
         if (login.getSenha().length() < 6) {
             throw new IllegalArgumentException("Senha deve ter no mínimo 6 caracteres");
         }
+        
+        if (login.getTipoLogin() == null || login.getTipoLogin().trim().isEmpty()) {
+            throw new IllegalArgumentException("Tipo de login é obrigatório");
+        }
+        
+        String tipoLoginUpper = login.getTipoLogin().toUpperCase().trim();
+        if (!tipoLoginUpper.equals("FUNCIONARIO") && 
+            !tipoLoginUpper.equals("ADMINISTRADOR") && 
+            !tipoLoginUpper.equals("USUARIO") && 
+            !tipoLoginUpper.equals("GESTOR") && 
+            !tipoLoginUpper.equals("ADMINISTRADOR EMP")) {
+            throw new IllegalArgumentException("Tipo de login inválido. Valores permitidos: FUNCIONARIO, ADMINISTRADOR, USUARIO, GESTOR, ADMINISTRADOR EMP");
+        }
+        
+        login.setTipoLogin(tipoLoginUpper);
     }
 }

@@ -12,22 +12,21 @@ import java.util.ArrayList;
 public class TrilhaDAO {
     
     public void adicionar(Trilha trilha) {
-        String sql = "INSERT INTO TB_SS_TRILHA (ID_TRILHA, ID_USUARIO, NOME_TRILHA, DATA_CRIACAO, STATUS) "
-                + "VALUES(SQ_SS_TRILHA.NEXTVAL, ?, ?, ?, ?)";
+        String sql = "INSERT INTO TB_SS_TRILHA (ID_TRILHA, NOME_TRILHA, DATA_CRIACAO, STATUS) "
+                + "VALUES(SQ_SS_TRILHA.NEXTVAL, ?, ?, ?)";
         
         try (Connection conexao = new ConnectionFactory().getConnection();
              PreparedStatement comandoDeInsercao = conexao.prepareStatement(sql)) {
             
-            comandoDeInsercao.setInt(1, trilha.getIdUsuario());
-            comandoDeInsercao.setString(2, trilha.getNomeTrilha());
+            comandoDeInsercao.setString(1, trilha.getNomeTrilha());
             
             if (trilha.getDataCriacao() != null) {
-                comandoDeInsercao.setObject(3, trilha.getDataCriacao());
+                comandoDeInsercao.setObject(2, trilha.getDataCriacao());
             } else {
-                comandoDeInsercao.setNull(3, Types.DATE);
+                comandoDeInsercao.setNull(2, Types.DATE);
             }
             
-            comandoDeInsercao.setString(4, trilha.getStatus());
+            comandoDeInsercao.setString(3, trilha.getStatus());
             
             comandoDeInsercao.execute();
         } catch (SQLException e) {
@@ -49,7 +48,6 @@ public class TrilhaDAO {
                 Trilha trilha = new Trilha();
                 trilha.setIdTrilha(rs.getInt("ID_TRILHA"));
                 
-                trilha.setIdUsuario(rs.getInt("ID_USUARIO"));
                 
                 trilha.setNomeTrilha(rs.getString("NOME_TRILHA"));
                 
@@ -71,7 +69,7 @@ public class TrilhaDAO {
     
     public boolean atualizar(Trilha trilha) {
         String sql = "UPDATE TB_SS_TRILHA "
-                + "SET ID_USUARIO = ?, NOME_TRILHA = ?, DATA_CRIACAO = ?, STATUS = ? "
+                + "SET NOME_TRILHA = ?, DATA_CRIACAO = ?, STATUS = ? "
                 + "WHERE ID_TRILHA = ?";
         
         try (Connection conexao = new ConnectionFactory().getConnection();
@@ -81,17 +79,16 @@ public class TrilhaDAO {
                 return false;
             }
             
-            comandoDeAtualizacao.setInt(1, trilha.getIdUsuario());
-            comandoDeAtualizacao.setString(2, trilha.getNomeTrilha());
+            comandoDeAtualizacao.setString(1, trilha.getNomeTrilha());
             
             if (trilha.getDataCriacao() != null) {
-                comandoDeAtualizacao.setObject(3, trilha.getDataCriacao());
+                comandoDeAtualizacao.setObject(2, trilha.getDataCriacao());
             } else {
-                comandoDeAtualizacao.setNull(3, Types.DATE);
+                comandoDeAtualizacao.setNull(2, Types.DATE);
             }
             
-            comandoDeAtualizacao.setString(4, trilha.getStatus());
-            comandoDeAtualizacao.setInt(5, trilha.getIdTrilha());
+            comandoDeAtualizacao.setString(3, trilha.getStatus());
+            comandoDeAtualizacao.setInt(4, trilha.getIdTrilha());
             
             int linhas = comandoDeAtualizacao.executeUpdate();
             return linhas > 0;
@@ -131,7 +128,6 @@ public class TrilhaDAO {
                     Trilha trilha = new Trilha();
                     trilha.setIdTrilha(rs.getInt("ID_TRILHA"));
                     
-                    trilha.setIdUsuario(rs.getInt("ID_USUARIO"));
                     
                     trilha.setNomeTrilha(rs.getString("NOME_TRILHA"));
                     
@@ -150,39 +146,6 @@ public class TrilhaDAO {
         return null;
     }
     
-    public ArrayList<Trilha> buscarPorUsuario(Integer idUsuario) {
-        ArrayList<Trilha> trilhas = new ArrayList<>();
-        String sql = "SELECT * FROM TB_SS_TRILHA WHERE ID_USUARIO = ?";
-        
-        try (Connection conexao = new ConnectionFactory().getConnection();
-             PreparedStatement st = conexao.prepareStatement(sql)) {
-            
-            st.setInt(1, idUsuario);
-            
-            try (ResultSet rs = st.executeQuery()) {
-                while (rs.next()) {
-                    Trilha trilha = new Trilha();
-                    trilha.setIdTrilha(rs.getInt("ID_TRILHA"));
-                    
-                    trilha.setIdUsuario(rs.getInt("ID_USUARIO"));
-                    
-                    trilha.setNomeTrilha(rs.getString("NOME_TRILHA"));
-                    
-                    if (rs.getObject("DATA_CRIACAO") != null) {
-                        trilha.setDataCriacao(rs.getObject("DATA_CRIACAO", LocalDate.class));
-                    }
-                    
-                    trilha.setStatus(rs.getString("STATUS"));
-                    trilhas.add(trilha);
-                }
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException("Erro ao buscar trilhas por usuário", e);
-        }
-        
-        return trilhas;
-    }
-    
     public ArrayList<Trilha> buscarPorStatus(String status) {
         ArrayList<Trilha> trilhas = new ArrayList<>();
         String sql = "SELECT * FROM TB_SS_TRILHA WHERE STATUS = ?";
@@ -197,7 +160,6 @@ public class TrilhaDAO {
                     Trilha trilha = new Trilha();
                     trilha.setIdTrilha(rs.getInt("ID_TRILHA"));
                     
-                    trilha.setIdUsuario(rs.getInt("ID_USUARIO"));
                     
                     trilha.setNomeTrilha(rs.getString("NOME_TRILHA"));
                     
@@ -230,7 +192,6 @@ public class TrilhaDAO {
                     Trilha trilha = new Trilha();
                     trilha.setIdTrilha(rs.getInt("ID_TRILHA"));
                     
-                    trilha.setIdUsuario(rs.getInt("ID_USUARIO"));
                     
                     trilha.setNomeTrilha(rs.getString("NOME_TRILHA"));
                     

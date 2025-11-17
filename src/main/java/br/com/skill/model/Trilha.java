@@ -5,7 +5,6 @@ import java.time.LocalDate;
 public class Trilha {
     
     private Integer idTrilha;
-    private Integer idUsuario;
     private String nomeTrilha;
     private LocalDate dataCriacao;
     private String status;
@@ -13,9 +12,8 @@ public class Trilha {
     public Trilha() {
     }
     
-    public Trilha(Integer idTrilha, Integer idUsuario, String nomeTrilha, LocalDate dataCriacao, String status) {
+    public Trilha(Integer idTrilha, String nomeTrilha, LocalDate dataCriacao, String status) {
         this.idTrilha = idTrilha;
-        this.idUsuario = idUsuario;
         this.nomeTrilha = nomeTrilha;
         this.dataCriacao = dataCriacao;
         this.status = status;
@@ -27,14 +25,6 @@ public class Trilha {
     
     public void setIdTrilha(Integer idTrilha) {
         this.idTrilha = idTrilha;
-    }
-    
-    public Integer getIdUsuario() {
-        return idUsuario;
-    }
-    
-    public void setIdUsuario(Integer idUsuario) {
-        this.idUsuario = idUsuario;
     }
     
     public String getNomeTrilha() {

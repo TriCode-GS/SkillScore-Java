@@ -50,18 +50,6 @@ public class TrilhaController {
     }
     
     @GET
-    @Path("/usuario/{idUsuario}")
-    public Response buscarPorUsuario(@PathParam("idUsuario") Integer idUsuario) {
-        try {
-            List<Trilha> trilhas = trilhaService.buscarPorUsuario(idUsuario);
-            return Response.ok(trilhas).build();
-        } catch (Exception e) {
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity("Erro ao buscar trilhas: " + e.getMessage()).build();
-        }
-    }
-    
-    @GET
     @Path("/status/{status}")
     public Response buscarPorStatus(@PathParam("status") String status) {
         try {

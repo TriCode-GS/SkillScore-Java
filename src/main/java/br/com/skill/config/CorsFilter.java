@@ -33,17 +33,23 @@ public class CorsFilter implements ContainerRequestFilter, ContainerResponseFilt
         
         // Tratar requisições OPTIONS (preflight)
         if ("OPTIONS".equals(requestContext.getMethod())) {
-            if (origin != null && ALLOWED_ORIGINS.contains(origin)) {
-                Response.ResponseBuilder response = Response.ok();
+            Response.ResponseBuilder response = Response.ok();
+            
+            // Sempre permite o origin da requisição (para desenvolvimento)
+            // Se não tiver origin, permite qualquer um (mas sem credentials)
+            if (origin != null) {
                 response.header("Access-Control-Allow-Origin", origin);
                 response.header("Access-Control-Allow-Credentials", "true");
-                response.header("Access-Control-Allow-Headers",
-                        "Origin, Content-Type, Accept, Authorization, X-Requested-With");
-                response.header("Access-Control-Allow-Methods",
-                        "GET, POST, PUT, DELETE, OPTIONS, HEAD");
-                response.header("Access-Control-Max-Age", "3600");
-                requestContext.abortWith(response.build());
+            } else {
+                response.header("Access-Control-Allow-Origin", "*");
             }
+            
+            response.header("Access-Control-Allow-Headers",
+                    "Origin, Content-Type, Accept, Authorization, X-Requested-With");
+            response.header("Access-Control-Allow-Methods",
+                    "GET, POST, PUT, DELETE, OPTIONS, HEAD");
+            response.header("Access-Control-Max-Age", "3600");
+            requestContext.abortWith(response.build());
         }
     }
 
@@ -51,14 +57,20 @@ public class CorsFilter implements ContainerRequestFilter, ContainerResponseFilt
     public void filter(ContainerRequestContext requestContext, ContainerResponseContext responseContext) {
         String origin = requestContext.getHeaderString("Origin");
         
-        if (origin != null && ALLOWED_ORIGINS.contains(origin)) {
+        // Sempre adiciona headers CORS
+        if (origin != null) {
+            // Se tem origin, usa ele e permite credentials
             responseContext.getHeaders().add("Access-Control-Allow-Origin", origin);
             responseContext.getHeaders().add("Access-Control-Allow-Credentials", "true");
-            responseContext.getHeaders().add("Access-Control-Allow-Headers",
-                    "Origin, Content-Type, Accept, Authorization, X-Requested-With");
-            responseContext.getHeaders().add("Access-Control-Allow-Methods",
-                    "GET, POST, PUT, DELETE, OPTIONS, HEAD");
-            responseContext.getHeaders().add("Access-Control-Max-Age", "3600");
+        } else {
+            // Se não tem origin, permite qualquer um (mas sem credentials)
+            responseContext.getHeaders().add("Access-Control-Allow-Origin", "*");
         }
+        
+        responseContext.getHeaders().add("Access-Control-Allow-Headers",
+                "Origin, Content-Type, Accept, Authorization, X-Requested-With");
+        responseContext.getHeaders().add("Access-Control-Allow-Methods",
+                "GET, POST, PUT, DELETE, OPTIONS, HEAD");
+        responseContext.getHeaders().add("Access-Control-Max-Age", "3600");
     }
 }

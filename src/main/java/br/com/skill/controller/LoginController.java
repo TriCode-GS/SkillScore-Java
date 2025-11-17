@@ -107,17 +107,32 @@ public class LoginController {
     }
     
     @POST
-    @Path("/autenticar")
-    public Response autenticar(@QueryParam("email") String email, @QueryParam("senha") String senha) {
+    @Path("/autenticar/administrador")
+    public Response autenticarAdministrador(@QueryParam("email") String email, @QueryParam("senha") String senha) {
         try {
-            Login login = loginService.autenticar(email, senha);
+            Login login = loginService.autenticarAdministrador(email, senha);
             return Response.ok(login).build();
         } catch (IllegalArgumentException e) {
             return Response.status(Response.Status.UNAUTHORIZED)
                     .entity(e.getMessage()).build();
         } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity("Erro ao autenticar: " + e.getMessage()).build();
+                    .entity("Erro ao autenticar administrador: " + e.getMessage()).build();
+        }
+    }
+    
+    @POST
+    @Path("/autenticar/usuario")
+    public Response autenticarUsuario(@QueryParam("email") String email, @QueryParam("senha") String senha) {
+        try {
+            Login login = loginService.autenticarUsuario(email, senha);
+            return Response.ok(login).build();
+        } catch (IllegalArgumentException e) {
+            return Response.status(Response.Status.UNAUTHORIZED)
+                    .entity(e.getMessage()).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("Erro ao autenticar usuário: " + e.getMessage()).build();
         }
     }
 }

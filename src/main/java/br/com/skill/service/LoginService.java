@@ -71,7 +71,7 @@ public class LoginService {
         return loginDAO.buscarPorUsuario(idUsuario);
     }
     
-    public Login autenticar(String email, String senha) {
+    public Login autenticarAdministrador(String email, String senha) {
         if (email == null || email.trim().isEmpty()) {
             throw new IllegalArgumentException("Email é obrigatório");
         }
@@ -83,6 +83,33 @@ public class LoginService {
         Login login = loginDAO.buscarPorEmailESenha(email, senha);
         if (login == null) {
             throw new IllegalArgumentException("Email ou senha inválidos");
+        }
+        
+        String tipoLogin = login.getTipoLogin();
+        if (tipoLogin == null || !tipoLogin.toUpperCase().trim().equals("ADMINISTRADOR")) {
+            throw new IllegalArgumentException("Acesso negado. Apenas administradores podem acessar esta área.");
+        }
+        
+        return login;
+    }
+    
+    public Login autenticarUsuario(String email, String senha) {
+        if (email == null || email.trim().isEmpty()) {
+            throw new IllegalArgumentException("Email é obrigatório");
+        }
+        
+        if (senha == null || senha.trim().isEmpty()) {
+            throw new IllegalArgumentException("Senha é obrigatória");
+        }
+        
+        Login login = loginDAO.buscarPorEmailESenha(email, senha);
+        if (login == null) {
+            throw new IllegalArgumentException("Email ou senha inválidos");
+        }
+        
+        String tipoLogin = login.getTipoLogin();
+        if (tipoLogin == null || !tipoLogin.toUpperCase().trim().equals("USUARIO")) {
+            throw new IllegalArgumentException("Acesso negado. Este login é apenas para usuários comuns.");
         }
         
         return login;

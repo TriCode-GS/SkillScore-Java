@@ -163,6 +163,7 @@ public class LoginDAO {
                     
                     login.setEmail(rs.getString("EMAIL"));
                     login.setSenha(rs.getString("SENHA"));
+                    login.setTipoLogin(rs.getString("TIPO_LOGIN"));
                     
                     if (rs.getObject("DATA_CRIACAO") != null) {
                         login.setDataCriacao(rs.getObject("DATA_CRIACAO", LocalDate.class));
@@ -195,6 +196,7 @@ public class LoginDAO {
                     
                     login.setEmail(rs.getString("EMAIL"));
                     login.setSenha(rs.getString("SENHA"));
+                    login.setTipoLogin(rs.getString("TIPO_LOGIN"));
                     
                     if (rs.getObject("DATA_CRIACAO") != null) {
                         login.setDataCriacao(rs.getObject("DATA_CRIACAO", LocalDate.class));
@@ -228,6 +230,7 @@ public class LoginDAO {
                     
                     login.setEmail(rs.getString("EMAIL"));
                     login.setSenha(rs.getString("SENHA"));
+                    login.setTipoLogin(rs.getString("TIPO_LOGIN"));
                     
                     if (rs.getObject("DATA_CRIACAO") != null) {
                         login.setDataCriacao(rs.getObject("DATA_CRIACAO", LocalDate.class));
@@ -261,6 +264,7 @@ public class LoginDAO {
                     
                     login.setEmail(rs.getString("EMAIL"));
                     login.setSenha(rs.getString("SENHA"));
+                    login.setTipoLogin(rs.getString("TIPO_LOGIN"));
                     
                     if (rs.getObject("DATA_CRIACAO") != null) {
                         login.setDataCriacao(rs.getObject("DATA_CRIACAO", LocalDate.class));

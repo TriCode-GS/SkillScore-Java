@@ -6,17 +6,15 @@ public class Empresa {
     private String nomeEmpresa;
     private String cnpj;
     private String setor;
-    private Integer administrador;
     
     public Empresa() {
     }
     
-    public Empresa(Integer idEmpresa, String nomeEmpresa, String cnpj, String setor, Integer administrador) {
+    public Empresa(Integer idEmpresa, String nomeEmpresa, String cnpj, String setor) {
         this.idEmpresa = idEmpresa;
         this.nomeEmpresa = nomeEmpresa;
         this.cnpj = cnpj;
         this.setor = setor;
-        this.administrador = administrador;
     }
     
     public Integer getIdEmpresa() {
@@ -49,13 +47,5 @@ public class Empresa {
     
     public void setSetor(String setor) {
         this.setor = setor;
-    }
-    
-    public Integer getAdministrador() {
-        return administrador;
-    }
-    
-    public void setAdministrador(Integer administrador) {
-        this.administrador = administrador;
     }
 }

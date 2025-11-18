@@ -60,9 +60,17 @@ public class UsuarioController {
         }
     }
     
-    // Endpoint removido - não existe mais tipo_usuario = 'ADMINISTRADOR EMP'
-    // Use GET /empresas/com-administrador para listar empresas com administrador
-    // ou GET /empresas/administrador/{idAdministrador} para buscar empresas de um administrador específico
+    @GET
+    @Path("/administradores-emp")
+    public Response listarAdministradoresEmp() {
+        try {
+            List<Usuario> usuarios = usuarioService.buscarAdministradoresEmp();
+            return Response.ok(usuarios).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("Erro ao listar administradores da empresa: " + e.getMessage()).build();
+        }
+    }
     
     @POST
     public Response salvar(Usuario usuario) {

@@ -64,6 +64,30 @@ public class EmpresaController {
         }
     }
     
+    @GET
+    @Path("/com-administrador")
+    public Response listarComAdministrador() {
+        try {
+            List<Empresa> empresas = empresaService.buscarComAdministrador();
+            return Response.ok(empresas).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("Erro ao listar empresas com administrador: " + e.getMessage()).build();
+        }
+    }
+    
+    @GET
+    @Path("/administrador/{idAdministrador}")
+    public Response buscarPorAdministrador(@PathParam("idAdministrador") Integer idAdministrador) {
+        try {
+            List<Empresa> empresas = empresaService.buscarPorAdministrador(idAdministrador);
+            return Response.ok(empresas).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("Erro ao buscar empresas por administrador: " + e.getMessage()).build();
+        }
+    }
+    
     @POST
     public Response salvar(Empresa empresa) {
         try {

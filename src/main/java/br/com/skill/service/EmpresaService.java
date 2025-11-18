@@ -61,6 +61,14 @@ public class EmpresaService {
         return empresaDAO.buscarPorCnpj(cnpj);
     }
     
+    public List<Empresa> buscarPorAdministrador(Integer idAdministrador) {
+        return empresaDAO.buscarPorAdministrador(idAdministrador);
+    }
+    
+    public List<Empresa> buscarComAdministrador() {
+        return empresaDAO.buscarComAdministrador();
+    }
+    
     private void validarEmpresa(Empresa empresa) {
         if (empresa == null) {
             throw new IllegalArgumentException("Empresa não pode ser nula");

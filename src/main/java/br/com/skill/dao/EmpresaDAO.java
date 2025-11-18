@@ -10,8 +10,8 @@ import java.util.ArrayList;
 public class EmpresaDAO {
     
     public void adicionar(Empresa empresa) {
-        String sql = "INSERT INTO TB_SS_EMPRESA (ID_EMPRESA, NOME_EMPRESA, CNPJ, SETOR) "
-                + "VALUES(SQ_SS_EMPRESA.NEXTVAL, ?, ?, ?)";
+        String sql = "INSERT INTO TB_SS_EMPRESA (ID_EMPRESA, NOME_EMPRESA, CNPJ, SETOR, ADMINISTRADOR) "
+                + "VALUES(SQ_SS_EMPRESA.NEXTVAL, ?, ?, ?, ?)";
         
         try (Connection conexao = new ConnectionFactory().getConnection();
              PreparedStatement comandoDeInsercao = conexao.prepareStatement(sql)) {
@@ -19,6 +19,12 @@ public class EmpresaDAO {
             comandoDeInsercao.setString(1, empresa.getNomeEmpresa());
             comandoDeInsercao.setString(2, empresa.getCnpj());
             comandoDeInsercao.setString(3, empresa.getSetor());
+            
+            if (empresa.getAdministrador() != null) {
+                comandoDeInsercao.setInt(4, empresa.getAdministrador());
+            } else {
+                comandoDeInsercao.setNull(4, java.sql.Types.INTEGER);
+            }
             
             comandoDeInsercao.execute();
         } catch (SQLException e) {
@@ -42,6 +48,11 @@ public class EmpresaDAO {
                 empresa.setNomeEmpresa(rs.getString("NOME_EMPRESA"));
                 empresa.setCnpj(rs.getString("CNPJ"));
                 empresa.setSetor(rs.getString("SETOR"));
+                
+                if (rs.getObject("ADMINISTRADOR") != null) {
+                    empresa.setAdministrador(rs.getInt("ADMINISTRADOR"));
+                }
+                
                 empresas.add(empresa);
             }
             
@@ -55,7 +66,7 @@ public class EmpresaDAO {
     
     public boolean atualizar(Empresa empresa) {
         String sql = "UPDATE TB_SS_EMPRESA "
-                + "SET NOME_EMPRESA = ?, CNPJ = ?, SETOR = ? "
+                + "SET NOME_EMPRESA = ?, CNPJ = ?, SETOR = ?, ADMINISTRADOR = ? "
                 + "WHERE ID_EMPRESA = ?";
         
         try (Connection conexao = new ConnectionFactory().getConnection();
@@ -68,7 +79,14 @@ public class EmpresaDAO {
             comandoDeAtualizacao.setString(1, empresa.getNomeEmpresa());
             comandoDeAtualizacao.setString(2, empresa.getCnpj());
             comandoDeAtualizacao.setString(3, empresa.getSetor());
-            comandoDeAtualizacao.setInt(4, empresa.getIdEmpresa());
+            
+            if (empresa.getAdministrador() != null) {
+                comandoDeAtualizacao.setInt(4, empresa.getAdministrador());
+            } else {
+                comandoDeAtualizacao.setNull(4, java.sql.Types.INTEGER);
+            }
+            
+            comandoDeAtualizacao.setInt(5, empresa.getIdEmpresa());
             
             int linhas = comandoDeAtualizacao.executeUpdate();
             return linhas > 0;
@@ -110,6 +128,11 @@ public class EmpresaDAO {
                     empresa.setNomeEmpresa(rs.getString("NOME_EMPRESA"));
                     empresa.setCnpj(rs.getString("CNPJ"));
                     empresa.setSetor(rs.getString("SETOR"));
+                    
+                    if (rs.getObject("ADMINISTRADOR") != null) {
+                        empresa.setAdministrador(rs.getInt("ADMINISTRADOR"));
+                    }
+                    
                     return empresa;
                 }
             }
@@ -135,6 +158,11 @@ public class EmpresaDAO {
                     empresa.setNomeEmpresa(rs.getString("NOME_EMPRESA"));
                     empresa.setCnpj(rs.getString("CNPJ"));
                     empresa.setSetor(rs.getString("SETOR"));
+                    
+                    if (rs.getObject("ADMINISTRADOR") != null) {
+                        empresa.setAdministrador(rs.getInt("ADMINISTRADOR"));
+                    }
+                    
                     return empresa;
                 }
             }
@@ -143,6 +171,66 @@ public class EmpresaDAO {
         }
         
         return null;
+    }
+    
+    public ArrayList<Empresa> buscarPorAdministrador(Integer idAdministrador) {
+        ArrayList<Empresa> empresas = new ArrayList<>();
+        String sql = "SELECT * FROM TB_SS_EMPRESA WHERE ADMINISTRADOR = ?";
+        
+        try (Connection conexao = new ConnectionFactory().getConnection();
+             PreparedStatement st = conexao.prepareStatement(sql)) {
+            
+            st.setInt(1, idAdministrador);
+            
+            try (ResultSet rs = st.executeQuery()) {
+                while (rs.next()) {
+                    Empresa empresa = new Empresa();
+                    empresa.setIdEmpresa(rs.getInt("ID_EMPRESA"));
+                    empresa.setNomeEmpresa(rs.getString("NOME_EMPRESA"));
+                    empresa.setCnpj(rs.getString("CNPJ"));
+                    empresa.setSetor(rs.getString("SETOR"));
+                    
+                    if (rs.getObject("ADMINISTRADOR") != null) {
+                        empresa.setAdministrador(rs.getInt("ADMINISTRADOR"));
+                    }
+                    
+                    empresas.add(empresa);
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao buscar empresas por administrador", e);
+        }
+        
+        return empresas;
+    }
+    
+    public ArrayList<Empresa> buscarComAdministrador() {
+        ArrayList<Empresa> empresas = new ArrayList<>();
+        String sql = "SELECT * FROM TB_SS_EMPRESA WHERE ADMINISTRADOR IS NOT NULL";
+        
+        try (Connection conexao = new ConnectionFactory().getConnection();
+             PreparedStatement st = conexao.prepareStatement(sql)) {
+            
+            try (ResultSet rs = st.executeQuery()) {
+                while (rs.next()) {
+                    Empresa empresa = new Empresa();
+                    empresa.setIdEmpresa(rs.getInt("ID_EMPRESA"));
+                    empresa.setNomeEmpresa(rs.getString("NOME_EMPRESA"));
+                    empresa.setCnpj(rs.getString("CNPJ"));
+                    empresa.setSetor(rs.getString("SETOR"));
+                    
+                    if (rs.getObject("ADMINISTRADOR") != null) {
+                        empresa.setAdministrador(rs.getInt("ADMINISTRADOR"));
+                    }
+                    
+                    empresas.add(empresa);
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao buscar empresas com administrador", e);
+        }
+        
+        return empresas;
     }
     
     public boolean idExiste(Integer idEmpresa) {

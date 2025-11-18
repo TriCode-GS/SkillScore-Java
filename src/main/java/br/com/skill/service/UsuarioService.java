@@ -62,9 +62,6 @@ public class UsuarioService {
         return usuarioDAO.buscarPorEmpresa(idEmpresa);
     }
     
-    public List<Usuario> buscarAdministradoresEmp() {
-        return usuarioDAO.buscarPorTipoUsuario("ADMINISTRADOR EMP");
-    }
     
     public void vincularEmpresa(Integer idUsuario, Integer idEmpresa) {
         Usuario usuario = usuarioDAO.buscarPorId(idUsuario);

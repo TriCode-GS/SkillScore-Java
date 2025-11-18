@@ -144,9 +144,8 @@ public class LoginService {
         if (!tipoLoginUpper.equals("FUNCIONARIO") && 
             !tipoLoginUpper.equals("ADMINISTRADOR") && 
             !tipoLoginUpper.equals("USUARIO") && 
-            !tipoLoginUpper.equals("GESTOR") && 
-            !tipoLoginUpper.equals("ADMINISTRADOR EMP")) {
-            throw new IllegalArgumentException("Tipo de login inválido. Valores permitidos: FUNCIONARIO, ADMINISTRADOR, USUARIO, GESTOR, ADMINISTRADOR EMP");
+            !tipoLoginUpper.equals("GESTOR")) {
+            throw new IllegalArgumentException("Tipo de login inválido. Valores permitidos: FUNCIONARIO, ADMINISTRADOR, USUARIO, GESTOR");
         }
         
         login.setTipoLogin(tipoLoginUpper);

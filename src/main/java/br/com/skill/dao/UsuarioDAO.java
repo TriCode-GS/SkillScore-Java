@@ -219,6 +219,31 @@ public class UsuarioDAO {
         return usuarios;
     }
     
+    public boolean atualizarIdEmpresa(Integer idUsuario, Integer idEmpresa) {
+        String sql = "UPDATE TB_SS_USUARIO SET ID_EMPRESA = ? WHERE ID_USUARIO = ?";
+        
+        if (!idExiste(idUsuario)) {
+            return false;
+        }
+        
+        try (Connection conexao = new ConnectionFactory().getConnection();
+             PreparedStatement st = conexao.prepareStatement(sql)) {
+            
+            if (idEmpresa != null) {
+                st.setInt(1, idEmpresa);
+            } else {
+                st.setNull(1, java.sql.Types.INTEGER);
+            }
+            
+            st.setInt(2, idUsuario);
+            
+            int linhas = st.executeUpdate();
+            return linhas > 0;
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao atualizar ID_EMPRESA do usuário", e);
+        }
+    }
+    
     public boolean idExiste(Integer idUsuario) {
         String sql = "SELECT 1 FROM TB_SS_USUARIO WHERE ID_USUARIO = ?";
         

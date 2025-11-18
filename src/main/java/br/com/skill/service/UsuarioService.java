@@ -66,6 +66,25 @@ public class UsuarioService {
         return usuarioDAO.buscarPorTipoUsuario("ADMINISTRADOR EMP");
     }
     
+    public void vincularEmpresa(Integer idUsuario, Integer idEmpresa) {
+        Usuario usuario = usuarioDAO.buscarPorId(idUsuario);
+        if (usuario == null) {
+            throw new IllegalArgumentException("Usuário não encontrado");
+        }
+        
+        if (idEmpresa != null) {
+            Empresa empresa = empresaDAO.buscarPorId(idEmpresa);
+            if (empresa == null) {
+                throw new IllegalArgumentException("Empresa não encontrada");
+            }
+        }
+        
+        boolean atualizado = usuarioDAO.atualizarIdEmpresa(idUsuario, idEmpresa);
+        if (!atualizado) {
+            throw new RuntimeException("Erro ao vincular usuário à empresa");
+        }
+    }
+    
     private void validarUsuario(Usuario usuario) {
         if (usuario == null) {
             throw new IllegalArgumentException("Usuário não pode ser nulo");

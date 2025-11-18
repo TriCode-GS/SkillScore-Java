@@ -102,6 +102,24 @@ public class UsuarioController {
         }
     }
     
+    @PUT
+    @Path("/{id}/empresa")
+    public Response vincularEmpresa(@PathParam("id") Integer idUsuario, Usuario usuario) {
+        try {
+            Integer idEmpresa = usuario.getIdEmpresa();
+            usuarioService.vincularEmpresa(idUsuario, idEmpresa);
+            
+            Usuario usuarioAtualizado = usuarioService.buscarPorId(idUsuario);
+            return Response.ok(usuarioAtualizado).build();
+        } catch (IllegalArgumentException e) {
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity(e.getMessage()).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("Erro ao vincular usuário à empresa: " + e.getMessage()).build();
+        }
+    }
+    
     @DELETE
     @Path("/{id}")
     public Response deletar(@PathParam("id") Integer id) {

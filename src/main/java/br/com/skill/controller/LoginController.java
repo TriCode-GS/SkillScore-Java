@@ -135,4 +135,19 @@ public class LoginController {
                     .entity("Erro ao autenticar usuário: " + e.getMessage()).build();
         }
     }
+    
+    @POST
+    @Path("/autenticar/administrador-emp")
+    public Response autenticarAdministradorEmp(@QueryParam("email") String email, @QueryParam("senha") String senha) {
+        try {
+            Login login = loginService.autenticarAdministradorEmp(email, senha);
+            return Response.ok(login).build();
+        } catch (IllegalArgumentException e) {
+            return Response.status(Response.Status.UNAUTHORIZED)
+                    .entity(e.getMessage()).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("Erro ao autenticar administrador de empresa: " + e.getMessage()).build();
+        }
+    }
 }

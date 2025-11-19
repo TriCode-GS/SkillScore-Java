@@ -115,6 +115,28 @@ public class LoginService {
         return login;
     }
     
+    public Login autenticarAdministradorEmp(String email, String senha) {
+        if (email == null || email.trim().isEmpty()) {
+            throw new IllegalArgumentException("Email é obrigatório");
+        }
+        
+        if (senha == null || senha.trim().isEmpty()) {
+            throw new IllegalArgumentException("Senha é obrigatória");
+        }
+        
+        Login login = loginDAO.buscarPorEmailESenha(email, senha);
+        if (login == null) {
+            throw new IllegalArgumentException("Email ou senha inválidos");
+        }
+        
+        String tipoLogin = login.getTipoLogin();
+        if (tipoLogin == null || !tipoLogin.toUpperCase().trim().equals("ADMINISTRADOR EMP")) {
+            throw new IllegalArgumentException("Acesso negado. Apenas administradores de empresa podem acessar esta área.");
+        }
+        
+        return login;
+    }
+    
     private void validarLogin(Login login) {
         if (login == null) {
             throw new IllegalArgumentException("Login não pode ser nulo");

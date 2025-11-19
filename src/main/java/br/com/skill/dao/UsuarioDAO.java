@@ -259,4 +259,20 @@ public class UsuarioDAO {
             throw new RuntimeException("Erro ao verificar ID_USUARIO", e);
         }
     }
+    
+    public boolean existeUsuarioVinculado(Integer idEmpresa) {
+        String sql = "SELECT 1 FROM TB_SS_USUARIO WHERE ID_EMPRESA = ?";
+        
+        try (Connection conexao = new ConnectionFactory().getConnection();
+             PreparedStatement st = conexao.prepareStatement(sql)) {
+            
+            st.setInt(1, idEmpresa);
+            
+            try (ResultSet rs = st.executeQuery()) {
+                return rs.next();
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao verificar usuários vinculados à empresa", e);
+        }
+    }
 }

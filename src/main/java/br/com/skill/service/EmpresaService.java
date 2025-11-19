@@ -3,11 +3,13 @@ package br.com.skill.service;
 import java.util.List;
 
 import br.com.skill.dao.EmpresaDAO;
+import br.com.skill.dao.UsuarioDAO;
 import br.com.skill.model.Empresa;
 
 public class EmpresaService {
     
     EmpresaDAO empresaDAO = new EmpresaDAO();
+    UsuarioDAO usuarioDAO = new UsuarioDAO();
     
     public void salvar(Empresa empresa) {
         validarEmpresa(empresa);
@@ -40,6 +42,10 @@ public class EmpresaService {
         Empresa empresa = empresaDAO.buscarPorId(idEmpresa);
         if (empresa == null) {
             throw new IllegalArgumentException("Empresa não encontrada");
+        }
+        
+        if (usuarioDAO.existeUsuarioVinculado(idEmpresa)) {
+            throw new IllegalStateException("Não é possível deletar a empresa. Existem usuários vinculados a esta empresa.");
         }
         
         empresaDAO.removerPorId(idEmpresa);

@@ -151,6 +151,27 @@ public class UsuarioService {
         }
     }
     
+    public void desvincularGestorDeDepartamento(Integer idUsuario) {
+        Usuario usuario = usuarioDAO.buscarPorId(idUsuario);
+        if (usuario == null) {
+            throw new IllegalArgumentException("Usuário não encontrado");
+        }
+        
+        String tipoUsuario = usuario.getTipoUsuario();
+        if (tipoUsuario == null || !tipoUsuario.toUpperCase().trim().equals("GESTOR")) {
+            throw new IllegalArgumentException("Apenas usuários do tipo GESTOR podem ser desvinculados de departamentos");
+        }
+        
+        if (usuario.getIdDepartamento() == null) {
+            throw new IllegalStateException("Este gestor não está vinculado a nenhum departamento");
+        }
+        
+        boolean atualizado = usuarioDAO.atualizarIdDepartamento(idUsuario, null);
+        if (!atualizado) {
+            throw new RuntimeException("Erro ao desvincular gestor do departamento");
+        }
+    }
+    
     private void validarUsuario(Usuario usuario) {
         if (usuario == null) {
             throw new IllegalArgumentException("Usuário não pode ser nulo");

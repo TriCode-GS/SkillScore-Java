@@ -166,6 +166,26 @@ public class UsuarioController {
     }
     
     @DELETE
+    @Path("/{id}/departamento")
+    public Response desvincularGestorDeDepartamento(@PathParam("id") Integer idUsuario) {
+        try {
+            usuarioService.desvincularGestorDeDepartamento(idUsuario);
+            
+            Usuario usuarioAtualizado = usuarioService.buscarPorId(idUsuario);
+            return Response.ok(usuarioAtualizado).build();
+        } catch (IllegalArgumentException e) {
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity(e.getMessage()).build();
+        } catch (IllegalStateException e) {
+            return Response.status(Response.Status.CONFLICT)
+                    .entity(e.getMessage()).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("Erro ao desvincular gestor do departamento: " + e.getMessage()).build();
+        }
+    }
+    
+    @DELETE
     @Path("/{id}")
     public Response deletar(@PathParam("id") Integer id) {
         try {

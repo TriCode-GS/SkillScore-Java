@@ -129,6 +129,15 @@ public class UsuarioService {
             throw new IllegalArgumentException("Apenas usuários do tipo GESTOR podem ser vinculados a departamentos");
         }
         
+        Integer departamentoAtual = usuario.getIdDepartamento();
+        if (departamentoAtual != null && idDepartamento != null) {
+            if (!departamentoAtual.equals(idDepartamento)) {
+                throw new IllegalStateException("Este gestor já está vinculado ao departamento ID " + departamentoAtual + 
+                        ". Não é possível vincular a outro departamento. " +
+                        "Para vincular a outro departamento, primeiro desvincule o gestor (envie idDepartamento: null).");
+            }
+        }
+        
         if (idDepartamento != null) {
             Departamento departamento = departamentoDAO.buscarPorId(idDepartamento);
             if (departamento == null) {

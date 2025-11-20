@@ -268,6 +268,31 @@ public class UsuarioDAO {
         }
     }
     
+    public boolean atualizarIdDepartamento(Integer idUsuario, Integer idDepartamento) {
+        String sql = "UPDATE TB_SS_USUARIO SET ID_DEPARTAMENTO = ? WHERE ID_USUARIO = ?";
+        
+        if (!idExiste(idUsuario)) {
+            return false;
+        }
+        
+        try (Connection conexao = new ConnectionFactory().getConnection();
+             PreparedStatement st = conexao.prepareStatement(sql)) {
+            
+            if (idDepartamento != null) {
+                st.setInt(1, idDepartamento);
+            } else {
+                st.setNull(1, java.sql.Types.INTEGER);
+            }
+            
+            st.setInt(2, idUsuario);
+            
+            int linhas = st.executeUpdate();
+            return linhas > 0;
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao atualizar ID_DEPARTAMENTO do usuário", e);
+        }
+    }
+    
     public boolean idExiste(Integer idUsuario) {
         String sql = "SELECT 1 FROM TB_SS_USUARIO WHERE ID_USUARIO = ?";
         

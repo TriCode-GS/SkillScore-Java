@@ -95,6 +95,10 @@ public class UsuarioService {
         return usuarioDAO.buscarPorTipoUsuario("ADMINISTRADOR EMP");
     }
     
+    public List<Usuario> buscarGestores() {
+        return usuarioDAO.buscarPorTipoUsuario("GESTOR");
+    }
+    
     public void vincularEmpresa(Integer idUsuario, Integer idEmpresa) {
         Usuario usuario = usuarioDAO.buscarPorId(idUsuario);
         if (usuario == null) {
@@ -111,6 +115,30 @@ public class UsuarioService {
         boolean atualizado = usuarioDAO.atualizarIdEmpresa(idUsuario, idEmpresa);
         if (!atualizado) {
             throw new RuntimeException("Erro ao vincular usuário à empresa");
+        }
+    }
+    
+    public void vincularGestorADepartamento(Integer idUsuario, Integer idDepartamento) {
+        Usuario usuario = usuarioDAO.buscarPorId(idUsuario);
+        if (usuario == null) {
+            throw new IllegalArgumentException("Usuário não encontrado");
+        }
+        
+        String tipoUsuario = usuario.getTipoUsuario();
+        if (tipoUsuario == null || !tipoUsuario.toUpperCase().trim().equals("GESTOR")) {
+            throw new IllegalArgumentException("Apenas usuários do tipo GESTOR podem ser vinculados a departamentos");
+        }
+        
+        if (idDepartamento != null) {
+            Departamento departamento = departamentoDAO.buscarPorId(idDepartamento);
+            if (departamento == null) {
+                throw new IllegalArgumentException("Departamento não encontrado");
+            }
+        }
+        
+        boolean atualizado = usuarioDAO.atualizarIdDepartamento(idUsuario, idDepartamento);
+        if (!atualizado) {
+            throw new RuntimeException("Erro ao vincular gestor ao departamento");
         }
     }
     

@@ -84,6 +84,18 @@ public class UsuarioController {
         }
     }
     
+    @GET
+    @Path("/gestores")
+    public Response listarGestores() {
+        try {
+            List<Usuario> usuarios = usuarioService.buscarGestores();
+            return Response.ok(usuarios).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("Erro ao listar gestores: " + e.getMessage()).build();
+        }
+    }
+    
     @POST
     public Response salvar(Usuario usuario) {
         try {
@@ -129,6 +141,24 @@ public class UsuarioController {
         } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                     .entity("Erro ao vincular usuário à empresa: " + e.getMessage()).build();
+        }
+    }
+    
+    @PUT
+    @Path("/{id}/departamento")
+    public Response vincularGestorADepartamento(@PathParam("id") Integer idUsuario, Usuario usuario) {
+        try {
+            Integer idDepartamento = usuario.getIdDepartamento();
+            usuarioService.vincularGestorADepartamento(idUsuario, idDepartamento);
+            
+            Usuario usuarioAtualizado = usuarioService.buscarPorId(idUsuario);
+            return Response.ok(usuarioAtualizado).build();
+        } catch (IllegalArgumentException e) {
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity(e.getMessage()).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("Erro ao vincular gestor ao departamento: " + e.getMessage()).build();
         }
     }
     

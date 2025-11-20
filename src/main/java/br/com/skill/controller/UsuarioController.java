@@ -61,6 +61,18 @@ public class UsuarioController {
     }
     
     @GET
+    @Path("/departamento/{idDepartamento}")
+    public Response buscarPorDepartamento(@PathParam("idDepartamento") Integer idDepartamento) {
+        try {
+            List<Usuario> usuarios = usuarioService.buscarPorDepartamento(idDepartamento);
+            return Response.ok(usuarios).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("Erro ao buscar usuários: " + e.getMessage()).build();
+        }
+    }
+    
+    @GET
     @Path("/administradores-emp")
     public Response listarAdministradoresEmp() {
         try {

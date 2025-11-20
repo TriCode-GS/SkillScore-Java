@@ -4,22 +4,22 @@ public class Usuario {
     
     private Integer idUsuario;
     private Integer idEmpresa;
+    private Integer idDepartamento;
     private String nomeUsuario;
     private String tipoUsuario;
-    private String areaAtuacao;
     private String nivelSenioridade;
     private String competencias;
     
     public Usuario() {
     }
     
-    public Usuario(Integer idUsuario, Integer idEmpresa, String nome, String nomeUsuario,
-                   String tipoUsuario, String areaAtuacao, String nivelSenioridade, String competencias) {
+    public Usuario(Integer idUsuario, Integer idEmpresa, Integer idDepartamento, String nome, String nomeUsuario,
+                   String tipoUsuario, String nivelSenioridade, String competencias) {
         this.idUsuario = idUsuario;
         this.idEmpresa = idEmpresa;
+        this.idDepartamento = idDepartamento;
         this.nomeUsuario = nomeUsuario;
         this.tipoUsuario = tipoUsuario;
-        this.areaAtuacao = areaAtuacao;
         this.nivelSenioridade = nivelSenioridade;
         this.competencias = competencias;
     }
@@ -40,6 +40,13 @@ public class Usuario {
         this.idEmpresa = idEmpresa;
     }
     
+    public Integer getIdDepartamento() {
+        return idDepartamento;
+    }
+    
+    public void setIdDepartamento(Integer idDepartamento) {
+        this.idDepartamento = idDepartamento;
+    }
     
     public String getNomeUsuario() {
         return nomeUsuario;
@@ -55,14 +62,6 @@ public class Usuario {
     
     public void setTipoUsuario(String tipoUsuario) {
         this.tipoUsuario = tipoUsuario;
-    }
-    
-    public String getAreaAtuacao() {
-        return areaAtuacao;
-    }
-    
-    public void setAreaAtuacao(String areaAtuacao) {
-        this.areaAtuacao = areaAtuacao;
     }
     
     public String getNivelSenioridade() {

@@ -2,8 +2,10 @@ package br.com.skill.service;
 
 import java.util.List;
 
+import br.com.skill.dao.DepartamentoDAO;
 import br.com.skill.dao.EmpresaDAO;
 import br.com.skill.dao.UsuarioDAO;
+import br.com.skill.model.Departamento;
 import br.com.skill.model.Empresa;
 import br.com.skill.model.Usuario;
 
@@ -13,8 +15,24 @@ public class UsuarioService {
     
     EmpresaDAO empresaDAO = new EmpresaDAO();
     
+    DepartamentoDAO departamentoDAO = new DepartamentoDAO();
+    
     public void salvar(Usuario usuario) {
         validarUsuario(usuario);
+        
+        if (usuario.getIdEmpresa() != null) {
+            Empresa empresa = empresaDAO.buscarPorId(usuario.getIdEmpresa());
+            if (empresa == null) {
+                throw new IllegalArgumentException("Empresa não encontrada");
+            }
+        }
+        
+        if (usuario.getIdDepartamento() != null) {
+            Departamento departamento = departamentoDAO.buscarPorId(usuario.getIdDepartamento());
+            if (departamento == null) {
+                throw new IllegalArgumentException("Departamento não encontrado");
+            }
+        }
         
         usuarioDAO.adicionar(usuario);
     }
@@ -31,6 +49,13 @@ public class UsuarioService {
             Empresa empresa = empresaDAO.buscarPorId(usuario.getIdEmpresa());
             if (empresa == null) {
                 throw new IllegalArgumentException("Empresa não encontrada");
+            }
+        }
+        
+        if (usuario.getIdDepartamento() != null) {
+            Departamento departamento = departamentoDAO.buscarPorId(usuario.getIdDepartamento());
+            if (departamento == null) {
+                throw new IllegalArgumentException("Departamento não encontrado");
             }
         }
         
@@ -60,6 +85,10 @@ public class UsuarioService {
     
     public List<Usuario> buscarPorEmpresa(Integer idEmpresa) {
         return usuarioDAO.buscarPorEmpresa(idEmpresa);
+    }
+    
+    public List<Usuario> buscarPorDepartamento(Integer idDepartamento) {
+        return usuarioDAO.buscarPorDepartamento(idDepartamento);
     }
     
     public List<Usuario> buscarAdministradoresEmp() {
@@ -104,18 +133,6 @@ public class UsuarioService {
                 throw new IllegalArgumentException("Tipo de usuário inválido. Valores permitidos: FUNCIONARIO, ADMINISTRADOR, USUARIO, GESTOR, ADMINISTRADOR EMP");
             }
             usuario.setTipoUsuario(tipoUsuarioUpper);
-        }
-        
-        if (usuario.getAreaAtuacao() != null && !usuario.getAreaAtuacao().trim().isEmpty()) {
-            String areaAtuacaoUpper = usuario.getAreaAtuacao().toUpperCase().trim();
-            if (!areaAtuacaoUpper.equals("TECNOLOGIA") && 
-                !areaAtuacaoUpper.equals("MARKETING") && 
-                !areaAtuacaoUpper.equals("RECURSOS HUMANOS") && 
-                !areaAtuacaoUpper.equals("FINANCEIRO") && 
-                !areaAtuacaoUpper.equals("ADMINISTRATIVO")) {
-                throw new IllegalArgumentException("Área de atuação inválida. Valores permitidos: TECNOLOGIA, MARKETING, RECURSOS HUMANOS, FINANCEIRO, ADMINISTRATIVO");
-            }
-            usuario.setAreaAtuacao(areaAtuacaoUpper);
         }
     }
 }

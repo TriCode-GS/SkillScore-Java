@@ -66,5 +66,15 @@ public class TrilhaService {
         if (trilha.getNomeTrilha().length() > 50) {
             throw new IllegalArgumentException("Nome da trilha deve ter no máximo 50 caracteres");
         }
+        
+        if (trilha.getStatus() != null && !trilha.getStatus().trim().isEmpty()) {
+            String statusUpper = trilha.getStatus().toUpperCase().trim();
+            if (!statusUpper.equals("EM ANDAMENTO") && 
+                !statusUpper.equals("CONCLUIDA") && 
+                !statusUpper.equals("NAO INICIADA")) {
+                throw new IllegalArgumentException("Status inválido. Valores permitidos: EM ANDAMENTO, CONCLUIDA, NAO INICIADA");
+            }
+            trilha.setStatus(statusUpper);
+        }
     }
 }

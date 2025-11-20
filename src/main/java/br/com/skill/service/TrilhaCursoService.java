@@ -97,5 +97,15 @@ public class TrilhaCursoService {
         if (trilhaCurso.getOrdemFase() == null || trilhaCurso.getOrdemFase() < 1) {
             throw new IllegalArgumentException("Ordem da fase deve ser maior que zero");
         }
+        
+        if (trilhaCurso.getStatusFase() != null && !trilhaCurso.getStatusFase().trim().isEmpty()) {
+            String statusFaseUpper = trilhaCurso.getStatusFase().toUpperCase().trim();
+            if (!statusFaseUpper.equals("EM ANDAMENTO") && 
+                !statusFaseUpper.equals("CONCLUIDA") && 
+                !statusFaseUpper.equals("NAO INICIADA")) {
+                throw new IllegalArgumentException("Status da fase inválido. Valores permitidos: EM ANDAMENTO, CONCLUIDA, NAO INICIADA");
+            }
+            trilhaCurso.setStatusFase(statusFaseUpper);
+        }
     }
 }

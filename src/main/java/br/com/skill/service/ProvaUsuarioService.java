@@ -104,9 +104,12 @@ public class ProvaUsuarioService {
             throw new IllegalArgumentException("Percentual de acerto deve estar entre 0 e 100");
         }
         
-        if (provaUsuario.getAprovado() != null && 
-            !provaUsuario.getAprovado().equals("S") && !provaUsuario.getAprovado().equals("N")) {
-            throw new IllegalArgumentException("Aprovado deve ser 'S' ou 'N'");
+        if (provaUsuario.getAprovado() != null && !provaUsuario.getAprovado().trim().isEmpty()) {
+            String aprovadoUpper = provaUsuario.getAprovado().toUpperCase().trim();
+            if (!aprovadoUpper.equals("S") && !aprovadoUpper.equals("N")) {
+                throw new IllegalArgumentException("Aprovado deve ser 'S' ou 'N'");
+            }
+            provaUsuario.setAprovado(aprovadoUpper);
         }
     }
 }

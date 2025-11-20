@@ -93,5 +93,29 @@ public class UsuarioService {
         if (usuario.getNomeUsuario() == null || usuario.getNomeUsuario().trim().isEmpty()) {
             throw new IllegalArgumentException("Nome do usuário é obrigatório");
         }
+        
+        if (usuario.getTipoUsuario() != null && !usuario.getTipoUsuario().trim().isEmpty()) {
+            String tipoUsuarioUpper = usuario.getTipoUsuario().toUpperCase().trim();
+            if (!tipoUsuarioUpper.equals("FUNCIONARIO") && 
+                !tipoUsuarioUpper.equals("ADMINISTRADOR") && 
+                !tipoUsuarioUpper.equals("USUARIO") && 
+                !tipoUsuarioUpper.equals("GESTOR") && 
+                !tipoUsuarioUpper.equals("ADMINISTRADOR EMP")) {
+                throw new IllegalArgumentException("Tipo de usuário inválido. Valores permitidos: FUNCIONARIO, ADMINISTRADOR, USUARIO, GESTOR, ADMINISTRADOR EMP");
+            }
+            usuario.setTipoUsuario(tipoUsuarioUpper);
+        }
+        
+        if (usuario.getAreaAtuacao() != null && !usuario.getAreaAtuacao().trim().isEmpty()) {
+            String areaAtuacaoUpper = usuario.getAreaAtuacao().toUpperCase().trim();
+            if (!areaAtuacaoUpper.equals("TECNOLOGIA") && 
+                !areaAtuacaoUpper.equals("MARKETING") && 
+                !areaAtuacaoUpper.equals("RECURSOS HUMANOS") && 
+                !areaAtuacaoUpper.equals("FINANCEIRO") && 
+                !areaAtuacaoUpper.equals("ADMINISTRATIVO")) {
+                throw new IllegalArgumentException("Área de atuação inválida. Valores permitidos: TECNOLOGIA, MARKETING, RECURSOS HUMANOS, FINANCEIRO, ADMINISTRATIVO");
+            }
+            usuario.setAreaAtuacao(areaAtuacaoUpper);
+        }
     }
 }

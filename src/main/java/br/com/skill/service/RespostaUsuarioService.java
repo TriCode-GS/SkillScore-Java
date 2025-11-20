@@ -94,13 +94,19 @@ public class RespostaUsuarioService {
             throw new IllegalArgumentException("Resposta é obrigatória");
         }
         
-        if (!respostaUsuario.getResposta().matches("[A-Da-d]")) {
+        String respostaUpper = respostaUsuario.getResposta().toUpperCase().trim();
+        if (!respostaUpper.equals("A") && !respostaUpper.equals("B") && 
+            !respostaUpper.equals("C") && !respostaUpper.equals("D")) {
             throw new IllegalArgumentException("Resposta deve ser A, B, C ou D");
         }
+        respostaUsuario.setResposta(respostaUpper);
         
-        if (respostaUsuario.getCorreta() != null && 
-            !respostaUsuario.getCorreta().equals("S") && !respostaUsuario.getCorreta().equals("N")) {
-            throw new IllegalArgumentException("Correta deve ser 'S' ou 'N'");
+        if (respostaUsuario.getCorreta() != null && !respostaUsuario.getCorreta().trim().isEmpty()) {
+            String corretaUpper = respostaUsuario.getCorreta().toUpperCase().trim();
+            if (!corretaUpper.equals("S") && !corretaUpper.equals("N")) {
+                throw new IllegalArgumentException("Correta deve ser 'S' ou 'N'");
+            }
+            respostaUsuario.setCorreta(corretaUpper);
         }
     }
 }

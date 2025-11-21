@@ -137,6 +137,33 @@ public class LoginService {
         return login;
     }
     
+    public Login autenticarGestor(String email, String senha) {
+        if (email == null || email.trim().isEmpty()) {
+            throw new IllegalArgumentException("Email é obrigatório");
+        }
+        
+        if (senha == null || senha.trim().isEmpty()) {
+            throw new IllegalArgumentException("Senha é obrigatória");
+        }
+        
+        Login login = loginDAO.buscarPorEmailESenha(email, senha);
+        if (login == null) {
+            throw new IllegalArgumentException("Email ou senha inválidos");
+        }
+        
+        Usuario usuario = usuarioDAO.buscarPorId(login.getIdUsuario());
+        if (usuario == null) {
+            throw new IllegalArgumentException("Usuário não encontrado");
+        }
+        
+        String tipoUsuario = usuario.getTipoUsuario();
+        if (tipoUsuario == null || !tipoUsuario.toUpperCase().trim().equals("GESTOR")) {
+            throw new IllegalArgumentException("Acesso negado. Apenas gestores podem acessar esta área.");
+        }
+        
+        return login;
+    }
+    
     private void validarLogin(Login login) {
         if (login == null) {
             throw new IllegalArgumentException("Login não pode ser nulo");

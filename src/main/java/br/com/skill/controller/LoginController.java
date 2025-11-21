@@ -150,4 +150,19 @@ public class LoginController {
                     .entity("Erro ao autenticar administrador de empresa: " + e.getMessage()).build();
         }
     }
+    
+    @POST
+    @Path("/autenticar/gestor")
+    public Response autenticarGestor(@QueryParam("email") String email, @QueryParam("senha") String senha) {
+        try {
+            Login login = loginService.autenticarGestor(email, senha);
+            return Response.ok(login).build();
+        } catch (IllegalArgumentException e) {
+            return Response.status(Response.Status.UNAUTHORIZED)
+                    .entity(e.getMessage()).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("Erro ao autenticar gestor: " + e.getMessage()).build();
+        }
+    }
 }

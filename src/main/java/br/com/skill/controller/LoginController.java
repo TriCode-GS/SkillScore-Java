@@ -165,4 +165,19 @@ public class LoginController {
                     .entity("Erro ao autenticar gestor: " + e.getMessage()).build();
         }
     }
+    
+    @POST
+    @Path("/autenticar/funcionario")
+    public Response autenticarFuncionario(@QueryParam("email") String email, @QueryParam("senha") String senha) {
+        try {
+            Login login = loginService.autenticarFuncionario(email, senha);
+            return Response.ok(login).build();
+        } catch (IllegalArgumentException e) {
+            return Response.status(Response.Status.UNAUTHORIZED)
+                    .entity(e.getMessage()).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("Erro ao autenticar funcionário: " + e.getMessage()).build();
+        }
+    }
 }

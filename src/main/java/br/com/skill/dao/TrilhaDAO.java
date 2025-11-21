@@ -225,4 +225,33 @@ public class TrilhaDAO {
             throw new RuntimeException("Erro ao verificar ID_TRILHA", e);
         }
     }
+    
+    public Trilha buscarPorNomeExato(String nomeTrilha) {
+        String sql = "SELECT * FROM TB_SS_TRILHA WHERE UPPER(TRIM(NOME_TRILHA)) = UPPER(TRIM(?))";
+        
+        try (Connection conexao = new ConnectionFactory().getConnection();
+             PreparedStatement st = conexao.prepareStatement(sql)) {
+            
+            st.setString(1, nomeTrilha);
+            
+            try (ResultSet rs = st.executeQuery()) {
+                if (rs.next()) {
+                    Trilha trilha = new Trilha();
+                    trilha.setIdTrilha(rs.getInt("ID_TRILHA"));
+                    trilha.setNomeTrilha(rs.getString("NOME_TRILHA"));
+                    
+                    if (rs.getObject("DATA_CRIACAO") != null) {
+                        trilha.setDataCriacao(rs.getObject("DATA_CRIACAO", LocalDate.class));
+                    }
+                    
+                    trilha.setStatus(rs.getString("STATUS"));
+                    return trilha;
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao buscar trilha por nome exato", e);
+        }
+        
+        return null;
+    }
 }

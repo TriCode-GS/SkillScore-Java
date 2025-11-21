@@ -11,6 +11,13 @@ public class TrilhaService {
     
     public void salvar(Trilha trilha) {
         validarTrilha(trilha);
+        
+        // Verifica se já existe uma trilha com o mesmo nome
+        Trilha trilhaExistente = trilhaDAO.buscarPorNomeExato(trilha.getNomeTrilha());
+        if (trilhaExistente != null) {
+            throw new IllegalArgumentException("Já existe uma trilha com o nome '" + trilha.getNomeTrilha() + "'");
+        }
+        
         trilhaDAO.adicionar(trilha);
     }
     
@@ -20,6 +27,12 @@ public class TrilhaService {
         Trilha trilhaExistente = trilhaDAO.buscarPorId(trilha.getIdTrilha());
         if (trilhaExistente == null) {
             throw new IllegalArgumentException("Trilha não encontrada");
+        }
+        
+        // Verifica se já existe outra trilha com o mesmo nome (exceto a própria trilha sendo atualizada)
+        Trilha trilhaComMesmoNome = trilhaDAO.buscarPorNomeExato(trilha.getNomeTrilha());
+        if (trilhaComMesmoNome != null && !trilhaComMesmoNome.getIdTrilha().equals(trilha.getIdTrilha())) {
+            throw new IllegalArgumentException("Já existe outra trilha com o nome '" + trilha.getNomeTrilha() + "'");
         }
         
         trilhaDAO.atualizar(trilha);

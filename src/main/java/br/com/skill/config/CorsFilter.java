@@ -35,13 +35,18 @@ public class CorsFilter implements ContainerRequestFilter, ContainerResponseFilt
         if ("OPTIONS".equals(requestContext.getMethod())) {
             Response.ResponseBuilder response = Response.ok();
             
-            // Sempre permite o origin da requisição (para desenvolvimento)
-            // Se não tiver origin, permite qualquer um (mas sem credentials)
-            if (origin != null) {
+            // Valida se o origin está na lista de permitidos
+            if (origin != null && isOriginAllowed(origin)) {
                 response.header("Access-Control-Allow-Origin", origin);
                 response.header("Access-Control-Allow-Credentials", "true");
-            } else {
+            } else if (origin == null) {
+                // Se não tiver origin, permite qualquer um (mas sem credentials)
                 response.header("Access-Control-Allow-Origin", "*");
+            } else {
+                // Origin não permitido, retorna erro
+                requestContext.abortWith(Response.status(Response.Status.FORBIDDEN)
+                        .entity("Origin não permitido").build());
+                return;
             }
             
             response.header("Access-Control-Allow-Headers",
@@ -57,20 +62,25 @@ public class CorsFilter implements ContainerRequestFilter, ContainerResponseFilt
     public void filter(ContainerRequestContext requestContext, ContainerResponseContext responseContext) {
         String origin = requestContext.getHeaderString("Origin");
         
-        // Sempre adiciona headers CORS
-        if (origin != null) {
-            // Se tem origin, usa ele e permite credentials
+        // Valida se o origin está na lista de permitidos
+        if (origin != null && isOriginAllowed(origin)) {
+            // Se tem origin permitido, usa ele e permite credentials
             responseContext.getHeaders().add("Access-Control-Allow-Origin", origin);
             responseContext.getHeaders().add("Access-Control-Allow-Credentials", "true");
-        } else {
+        } else if (origin == null) {
             // Se não tem origin, permite qualquer um (mas sem credentials)
             responseContext.getHeaders().add("Access-Control-Allow-Origin", "*");
         }
+        // Se origin não permitido, não adiciona headers CORS (requisição será bloqueada pelo navegador)
         
         responseContext.getHeaders().add("Access-Control-Allow-Headers",
                 "Origin, Content-Type, Accept, Authorization, X-Requested-With");
         responseContext.getHeaders().add("Access-Control-Allow-Methods",
                 "GET, POST, PUT, DELETE, OPTIONS, HEAD");
         responseContext.getHeaders().add("Access-Control-Max-Age", "3600");
+    }
+    
+    private boolean isOriginAllowed(String origin) {
+        return ALLOWED_ORIGINS.contains(origin);
     }
 }

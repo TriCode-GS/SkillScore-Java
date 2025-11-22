@@ -89,6 +89,33 @@ public class TrilhaCursoService {
         return trilhaCursoDAO.buscarPorStatusFase(statusFase);
     }
     
+    public void atualizarStatusFase(Integer idTrilhaCurso, String statusFase) {
+        if (idTrilhaCurso == null) {
+            throw new IllegalArgumentException("ID do TrilhaCurso é obrigatório");
+        }
+        
+        TrilhaCurso trilhaCurso = trilhaCursoDAO.buscarPorId(idTrilhaCurso);
+        if (trilhaCurso == null) {
+            throw new IllegalArgumentException("TrilhaCurso não encontrado");
+        }
+        
+        if (statusFase == null || statusFase.trim().isEmpty()) {
+            throw new IllegalArgumentException("Status da fase é obrigatório");
+        }
+        
+        String statusFaseUpper = statusFase.toUpperCase().trim();
+        if (!statusFaseUpper.equals("EM ANDAMENTO") && 
+            !statusFaseUpper.equals("CONCLUIDA") && 
+            !statusFaseUpper.equals("NAO INICIADA")) {
+            throw new IllegalArgumentException("Status da fase inválido. Valores permitidos: EM ANDAMENTO, CONCLUIDA, NAO INICIADA");
+        }
+        
+        boolean atualizado = trilhaCursoDAO.atualizarStatusFase(idTrilhaCurso, statusFaseUpper);
+        if (!atualizado) {
+            throw new RuntimeException("Erro ao atualizar status da fase");
+        }
+    }
+    
     private void validarTrilhaCurso(TrilhaCurso trilhaCurso) {
         if (trilhaCurso == null) {
             throw new IllegalArgumentException("TrilhaCurso não pode ser nulo");

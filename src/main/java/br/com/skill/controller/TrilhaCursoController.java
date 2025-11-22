@@ -114,6 +114,24 @@ public class TrilhaCursoController {
         }
     }
     
+    @PUT
+    @Path("/{id}/status-fase")
+    public Response atualizarStatusFase(@PathParam("id") Integer id, TrilhaCurso trilhaCurso) {
+        try {
+            String statusFase = trilhaCurso.getStatusFase();
+            trilhaCursoService.atualizarStatusFase(id, statusFase);
+            
+            TrilhaCurso trilhaCursoAtualizado = trilhaCursoService.buscarPorId(id);
+            return Response.ok(trilhaCursoAtualizado).build();
+        } catch (IllegalArgumentException e) {
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity(e.getMessage()).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("Erro ao atualizar status da fase: " + e.getMessage()).build();
+        }
+    }
+    
     @DELETE
     @Path("/{id}")
     public Response deletar(@PathParam("id") Integer id) {

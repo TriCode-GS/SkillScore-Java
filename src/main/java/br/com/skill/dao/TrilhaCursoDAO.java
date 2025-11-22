@@ -260,6 +260,26 @@ public class TrilhaCursoDAO {
         return trilhaCursos;
     }
     
+    public boolean atualizarStatusFase(Integer idTrilhaCurso, String statusFase) {
+        String sql = "UPDATE TB_SS_TRILHA_CURSO SET STATUS_FASE = ? WHERE ID_TRILHA_CURSO = ?";
+        
+        if (!idExiste(idTrilhaCurso)) {
+            return false;
+        }
+        
+        try (Connection conexao = new ConnectionFactory().getConnection();
+             PreparedStatement st = conexao.prepareStatement(sql)) {
+            
+            st.setString(1, statusFase);
+            st.setInt(2, idTrilhaCurso);
+            
+            int linhas = st.executeUpdate();
+            return linhas > 0;
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao atualizar status da fase", e);
+        }
+    }
+    
     public boolean idExiste(Integer idTrilhaCurso) {
         String sql = "SELECT 1 FROM TB_SS_TRILHA_CURSO WHERE ID_TRILHA_CURSO = ?";
         

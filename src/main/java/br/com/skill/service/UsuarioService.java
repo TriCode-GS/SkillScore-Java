@@ -113,6 +113,28 @@ public class UsuarioService {
         return usuarioDAO.buscarPorTrilha(idTrilha);
     }
     
+    public List<Usuario> buscarPorEmpresaEDepartamento(Integer idEmpresa, Integer idDepartamento) {
+        if (idEmpresa == null) {
+            throw new IllegalArgumentException("ID da Empresa é obrigatório");
+        }
+        
+        if (idDepartamento == null) {
+            throw new IllegalArgumentException("ID do Departamento é obrigatório");
+        }
+        
+        Empresa empresa = empresaDAO.buscarPorId(idEmpresa);
+        if (empresa == null) {
+            throw new IllegalArgumentException("Empresa não encontrada");
+        }
+        
+        Departamento departamento = departamentoDAO.buscarPorId(idDepartamento);
+        if (departamento == null) {
+            throw new IllegalArgumentException("Departamento não encontrado");
+        }
+        
+        return usuarioDAO.buscarPorEmpresaEDepartamento(idEmpresa, idDepartamento);
+    }
+    
     public List<Usuario> buscarAdministradoresEmp() {
         return usuarioDAO.buscarPorTipoUsuario("ADMINISTRADOR EMP");
     }

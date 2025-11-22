@@ -393,6 +393,47 @@ public class UsuarioDAO {
         return usuarios;
     }
     
+    public ArrayList<Usuario> buscarPorEmpresaEDepartamento(Integer idEmpresa, Integer idDepartamento) {
+        ArrayList<Usuario> usuarios = new ArrayList<>();
+        String sql = "SELECT * FROM TB_SS_USUARIO WHERE ID_EMPRESA = ? AND ID_DEPARTAMENTO = ?";
+        
+        try (Connection conexao = new ConnectionFactory().getConnection();
+             PreparedStatement st = conexao.prepareStatement(sql)) {
+            
+            st.setInt(1, idEmpresa);
+            st.setInt(2, idDepartamento);
+            
+            try (ResultSet rs = st.executeQuery()) {
+                while (rs.next()) {
+                    Usuario usuario = new Usuario();
+                    usuario.setIdUsuario(rs.getInt("ID_USUARIO"));
+                    
+                    if (rs.getObject("ID_EMPRESA") != null) {
+                        usuario.setIdEmpresa(rs.getInt("ID_EMPRESA"));
+                    }
+                    
+                    if (rs.getObject("ID_DEPARTAMENTO") != null) {
+                        usuario.setIdDepartamento(rs.getInt("ID_DEPARTAMENTO"));
+                    }
+                    
+                    if (rs.getObject("ID_TRILHA") != null) {
+                        usuario.setIdTrilha(rs.getInt("ID_TRILHA"));
+                    }
+                    
+                    usuario.setNomeUsuario(rs.getString("NOME_USUARIO"));
+                    usuario.setTipoUsuario(rs.getString("TIPO_USUARIO"));
+                    usuario.setNivelSenioridade(rs.getString("NIVEL_SENIORIDADE"));
+                    usuario.setCompetencias(rs.getString("COMPETENCIAS"));
+                    usuarios.add(usuario);
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao buscar usuários por empresa e departamento", e);
+        }
+        
+        return usuarios;
+    }
+    
     public boolean atualizarIdTrilha(Integer idUsuario, Integer idTrilha) {
         String sql = "UPDATE TB_SS_USUARIO SET ID_TRILHA = ? WHERE ID_USUARIO = ?";
         

@@ -85,6 +85,22 @@ public class UsuarioController {
     }
     
     @GET
+    @Path("/empresa/{idEmpresa}/departamento/{idDepartamento}")
+    public Response buscarPorEmpresaEDepartamento(@PathParam("idEmpresa") Integer idEmpresa, 
+                                                   @PathParam("idDepartamento") Integer idDepartamento) {
+        try {
+            List<Usuario> usuarios = usuarioService.buscarPorEmpresaEDepartamento(idEmpresa, idDepartamento);
+            return Response.ok(usuarios).build();
+        } catch (IllegalArgumentException e) {
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity(e.getMessage()).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("Erro ao buscar usuários: " + e.getMessage()).build();
+        }
+    }
+    
+    @GET
     @Path("/administradores-emp")
     public Response listarAdministradoresEmp() {
         try {

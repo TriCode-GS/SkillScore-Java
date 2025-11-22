@@ -1,6 +1,7 @@
 package br.com.skill.dao;
 
 import br.com.skill.model.TrilhaCurso;
+import br.com.skill.model.TrilhaCursoCompleto;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -258,6 +259,53 @@ public class TrilhaCursoDAO {
         }
         
         return trilhaCursos;
+    }
+    
+    public ArrayList<TrilhaCursoCompleto> buscarPorTrilhaComDadosCurso(Integer idTrilha) {
+        ArrayList<TrilhaCursoCompleto> trilhaCursosCompletos = new ArrayList<>();
+        String sql = "SELECT tc.ID_TRILHA_CURSO, tc.ID_TRILHA, tc.ID_CURSO, tc.ORDEM_FASE, " +
+                     "tc.STATUS_FASE, tc.DATA_CONCLUSAO, " +
+                     "c.TITULO, c.DESCRICAO, c.LINK_CURSO, c.AREA_RELACIONADA, " +
+                     "c.NIVEL_RECOMENDADO, c.DURACAO_HORAS " +
+                     "FROM TB_SS_TRILHA_CURSO tc " +
+                     "INNER JOIN TB_SS_CURSO c ON tc.ID_CURSO = c.ID_CURSO " +
+                     "WHERE tc.ID_TRILHA = ? " +
+                     "ORDER BY tc.ORDEM_FASE ASC";
+        
+        try (Connection conexao = new ConnectionFactory().getConnection();
+             PreparedStatement st = conexao.prepareStatement(sql)) {
+            
+            st.setInt(1, idTrilha);
+            
+            try (ResultSet rs = st.executeQuery()) {
+                while (rs.next()) {
+                    TrilhaCursoCompleto trilhaCursoCompleto = new TrilhaCursoCompleto();
+                    
+                    trilhaCursoCompleto.setIdTrilhaCurso(rs.getInt("ID_TRILHA_CURSO"));
+                    trilhaCursoCompleto.setIdTrilha(rs.getInt("ID_TRILHA"));
+                    trilhaCursoCompleto.setIdCurso(rs.getInt("ID_CURSO"));
+                    trilhaCursoCompleto.setOrdemFase(rs.getInt("ORDEM_FASE"));
+                    trilhaCursoCompleto.setStatusFase(rs.getString("STATUS_FASE"));
+                    
+                    if (rs.getObject("DATA_CONCLUSAO") != null) {
+                        trilhaCursoCompleto.setDataConclusao(rs.getObject("DATA_CONCLUSAO", LocalDate.class));
+                    }
+                    
+                    trilhaCursoCompleto.setTitulo(rs.getString("TITULO"));
+                    trilhaCursoCompleto.setDescricao(rs.getString("DESCRICAO"));
+                    trilhaCursoCompleto.setLinkCurso(rs.getString("LINK_CURSO"));
+                    trilhaCursoCompleto.setAreaRelacionada(rs.getString("AREA_RELACIONADA"));
+                    trilhaCursoCompleto.setNivelRecomendado(rs.getString("NIVEL_RECOMENDADO"));
+                    trilhaCursoCompleto.setDuracaoHoras(rs.getString("DURACAO_HORAS"));
+                    
+                    trilhaCursosCompletos.add(trilhaCursoCompleto);
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao buscar trilha-cursos com dados do curso", e);
+        }
+        
+        return trilhaCursosCompletos;
     }
     
     public boolean atualizarStatusFase(Integer idTrilhaCurso, String statusFase) {

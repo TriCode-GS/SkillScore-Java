@@ -6,6 +6,7 @@ import br.com.skill.dao.CursoDAO;
 import br.com.skill.dao.TrilhaCursoDAO;
 import br.com.skill.dao.TrilhaDAO;
 import br.com.skill.model.TrilhaCurso;
+import br.com.skill.model.TrilhaCursoCompleto;
 
 public class TrilhaCursoService {
     
@@ -79,6 +80,18 @@ public class TrilhaCursoService {
     
     public List<TrilhaCurso> buscarPorTrilha(Integer idTrilha) {
         return trilhaCursoDAO.buscarPorTrilha(idTrilha);
+    }
+    
+    public List<TrilhaCursoCompleto> buscarPorTrilhaComDadosCurso(Integer idTrilha) {
+        if (idTrilha == null) {
+            throw new IllegalArgumentException("ID da Trilha é obrigatório");
+        }
+        
+        if (trilhaDAO.buscarPorId(idTrilha) == null) {
+            throw new IllegalArgumentException("Trilha não encontrada");
+        }
+        
+        return trilhaCursoDAO.buscarPorTrilhaComDadosCurso(idTrilha);
     }
     
     public List<TrilhaCurso> buscarPorCurso(Integer idCurso) {

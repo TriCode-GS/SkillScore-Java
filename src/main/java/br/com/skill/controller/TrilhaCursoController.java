@@ -3,6 +3,7 @@ package br.com.skill.controller;
 import java.util.List;
 
 import br.com.skill.model.TrilhaCurso;
+import br.com.skill.model.TrilhaCursoCompleto;
 import br.com.skill.service.TrilhaCursoService;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
@@ -52,8 +53,11 @@ public class TrilhaCursoController {
     @Path("/trilha/{idTrilha}")
     public Response buscarPorTrilha(@PathParam("idTrilha") Integer idTrilha) {
         try {
-            List<TrilhaCurso> trilhaCursos = trilhaCursoService.buscarPorTrilha(idTrilha);
+            List<TrilhaCursoCompleto> trilhaCursos = trilhaCursoService.buscarPorTrilhaComDadosCurso(idTrilha);
             return Response.ok(trilhaCursos).build();
+        } catch (IllegalArgumentException e) {
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity(e.getMessage()).build();
         } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                     .entity("Erro ao buscar trilha-cursos: " + e.getMessage()).build();

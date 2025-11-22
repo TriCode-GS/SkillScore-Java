@@ -156,7 +156,7 @@ public class TrilhaCursoDAO {
     
     public ArrayList<TrilhaCurso> buscarPorTrilha(Integer idTrilha) {
         ArrayList<TrilhaCurso> trilhaCursos = new ArrayList<>();
-        String sql = "SELECT * FROM TB_SS_TRILHA_CURSO WHERE ID_TRILHA = ? ORDER BY ORDEM_FASE";
+        String sql = "SELECT * FROM TB_SS_TRILHA_CURSO WHERE ID_TRILHA = ? ORDER BY ORDEM_FASE ASC";
         
         try (Connection conexao = new ConnectionFactory().getConnection();
              PreparedStatement st = conexao.prepareStatement(sql)) {
@@ -186,6 +186,10 @@ public class TrilhaCursoDAO {
         }
         
         return trilhaCursos;
+    }
+    
+    public ArrayList<TrilhaCurso> buscarPorTrilhaOrdenadoPorFase(Integer idTrilha) {
+        return buscarPorTrilha(idTrilha);
     }
     
     public ArrayList<TrilhaCurso> buscarPorCurso(Integer idCurso) {

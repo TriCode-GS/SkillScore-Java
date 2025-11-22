@@ -18,7 +18,6 @@ public class TrilhaCursoService {
     public void salvar(TrilhaCurso trilhaCurso) {
         validarTrilhaCurso(trilhaCurso);
         
-        // Se idTrilha não foi informado, usa o último ID de trilha cadastrado
         if (trilhaCurso.getIdTrilha() == null) {
             Integer ultimoIdTrilha = trilhaDAO.obterUltimoIdTrilha();
             if (ultimoIdTrilha == null) {
@@ -95,8 +94,6 @@ public class TrilhaCursoService {
             throw new IllegalArgumentException("TrilhaCurso não pode ser nulo");
         }
         
-        // ID da Trilha é opcional no cadastro (será preenchido automaticamente com o último ID)
-        // Mas é obrigatório na atualização
         
         if (trilhaCurso.getIdCurso() == null) {
             throw new IllegalArgumentException("ID do Curso é obrigatório");

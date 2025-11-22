@@ -5,8 +5,10 @@ import java.util.List;
 import br.com.skill.dao.CursoDAO;
 import br.com.skill.dao.TrilhaCursoDAO;
 import br.com.skill.dao.TrilhaDAO;
+import br.com.skill.dao.UsuarioDAO;
 import br.com.skill.model.TrilhaCurso;
 import br.com.skill.model.TrilhaCursoCompleto;
+import br.com.skill.model.Usuario;
 
 public class TrilhaCursoService {
     
@@ -15,6 +17,8 @@ public class TrilhaCursoService {
     TrilhaDAO trilhaDAO = new TrilhaDAO();
     
     CursoDAO cursoDAO = new CursoDAO();
+    
+    UsuarioDAO usuarioDAO = new UsuarioDAO();
     
     public void salvar(TrilhaCurso trilhaCurso) {
         validarTrilhaCurso(trilhaCurso);
@@ -102,14 +106,32 @@ public class TrilhaCursoService {
         return trilhaCursoDAO.buscarPorStatusFase(statusFase);
     }
     
-    public void atualizarStatusFase(Integer idTrilhaCurso, String statusFase) {
+    public void atualizarStatusFase(Integer idTrilhaCurso, String statusFase, Integer idUsuario) {
         if (idTrilhaCurso == null) {
             throw new IllegalArgumentException("ID do TrilhaCurso é obrigatório");
+        }
+        
+        if (idUsuario == null) {
+            throw new IllegalArgumentException("ID do Usuário é obrigatório");
         }
         
         TrilhaCurso trilhaCurso = trilhaCursoDAO.buscarPorId(idTrilhaCurso);
         if (trilhaCurso == null) {
             throw new IllegalArgumentException("TrilhaCurso não encontrado");
+        }
+        
+        // Valida se o TrilhaCurso pertence à trilha do usuário
+        Usuario usuario = usuarioDAO.buscarPorId(idUsuario);
+        if (usuario == null) {
+            throw new IllegalArgumentException("Usuário não encontrado");
+        }
+        
+        if (usuario.getIdTrilha() == null) {
+            throw new IllegalArgumentException("Usuário não está vinculado a nenhuma trilha");
+        }
+        
+        if (!usuario.getIdTrilha().equals(trilhaCurso.getIdTrilha())) {
+            throw new IllegalArgumentException("Este TrilhaCurso não pertence à trilha do usuário. O usuário está vinculado à trilha ID " + usuario.getIdTrilha() + ", mas o TrilhaCurso pertence à trilha ID " + trilhaCurso.getIdTrilha());
         }
         
         if (statusFase == null || statusFase.trim().isEmpty()) {

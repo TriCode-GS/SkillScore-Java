@@ -73,6 +73,18 @@ public class UsuarioController {
     }
     
     @GET
+    @Path("/trilha/{idTrilha}")
+    public Response buscarPorTrilha(@PathParam("idTrilha") Integer idTrilha) {
+        try {
+            List<Usuario> usuarios = usuarioService.buscarPorTrilha(idTrilha);
+            return Response.ok(usuarios).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("Erro ao buscar usuários: " + e.getMessage()).build();
+        }
+    }
+    
+    @GET
     @Path("/administradores-emp")
     public Response listarAdministradoresEmp() {
         try {
@@ -182,6 +194,44 @@ public class UsuarioController {
         } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                     .entity("Erro ao desvincular gestor do departamento: " + e.getMessage()).build();
+        }
+    }
+    
+    @PUT
+    @Path("/{id}/trilha")
+    public Response vincularTrilha(@PathParam("id") Integer idUsuario, Usuario usuario) {
+        try {
+            Integer idTrilha = usuario.getIdTrilha();
+            usuarioService.vincularTrilha(idUsuario, idTrilha);
+            
+            Usuario usuarioAtualizado = usuarioService.buscarPorId(idUsuario);
+            return Response.ok(usuarioAtualizado).build();
+        } catch (IllegalArgumentException e) {
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity(e.getMessage()).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("Erro ao vincular usuário à trilha: " + e.getMessage()).build();
+        }
+    }
+    
+    @DELETE
+    @Path("/{id}/trilha")
+    public Response desvincularTrilha(@PathParam("id") Integer idUsuario) {
+        try {
+            usuarioService.desvincularTrilha(idUsuario);
+            
+            Usuario usuarioAtualizado = usuarioService.buscarPorId(idUsuario);
+            return Response.ok(usuarioAtualizado).build();
+        } catch (IllegalArgumentException e) {
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity(e.getMessage()).build();
+        } catch (IllegalStateException e) {
+            return Response.status(Response.Status.CONFLICT)
+                    .entity(e.getMessage()).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("Erro ao desvincular usuário da trilha: " + e.getMessage()).build();
         }
     }
     

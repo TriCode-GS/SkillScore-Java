@@ -11,9 +11,9 @@ import br.com.skill.model.Usuario;
 public class UsuarioDAO {
     
     public void adicionar(Usuario usuario) {
-        String sql = "INSERT INTO TB_SS_USUARIO (ID_USUARIO, ID_EMPRESA, ID_DEPARTAMENTO, NOME_USUARIO, "
+        String sql = "INSERT INTO TB_SS_USUARIO (ID_USUARIO, ID_EMPRESA, ID_DEPARTAMENTO, ID_TRILHA, NOME_USUARIO, "
                 + "TIPO_USUARIO, NIVEL_SENIORIDADE, COMPETENCIAS) "
-                + "VALUES(SQ_SS_USUARIO.NEXTVAL, ?, ?, ?, ?, ?, ?)";
+                + "VALUES(SQ_SS_USUARIO.NEXTVAL, ?, ?, ?, ?, ?, ?, ?)";
         
         try (Connection conexao = new ConnectionFactory().getConnection();
              PreparedStatement comandoDeInsercao = conexao.prepareStatement(sql)) {
@@ -30,10 +30,16 @@ public class UsuarioDAO {
                 comandoDeInsercao.setNull(2, java.sql.Types.INTEGER);
             }
             
-            comandoDeInsercao.setString(3, usuario.getNomeUsuario());
-            comandoDeInsercao.setString(4, usuario.getTipoUsuario());
-            comandoDeInsercao.setString(5, usuario.getNivelSenioridade());
-            comandoDeInsercao.setString(6, usuario.getCompetencias());
+            if (usuario.getIdTrilha() != null) {
+                comandoDeInsercao.setInt(3, usuario.getIdTrilha());
+            } else {
+                comandoDeInsercao.setNull(3, java.sql.Types.INTEGER);
+            }
+            
+            comandoDeInsercao.setString(4, usuario.getNomeUsuario());
+            comandoDeInsercao.setString(5, usuario.getTipoUsuario());
+            comandoDeInsercao.setString(6, usuario.getNivelSenioridade());
+            comandoDeInsercao.setString(7, usuario.getCompetencias());
             
             comandoDeInsercao.execute();
         } catch (SQLException e) {
@@ -63,6 +69,10 @@ public class UsuarioDAO {
                     usuario.setIdDepartamento(rs.getInt("ID_DEPARTAMENTO"));
                 }
                 
+                if (rs.getObject("ID_TRILHA") != null) {
+                    usuario.setIdTrilha(rs.getInt("ID_TRILHA"));
+                }
+                
                 usuario.setNomeUsuario(rs.getString("NOME_USUARIO"));
                 usuario.setTipoUsuario(rs.getString("TIPO_USUARIO"));
                 usuario.setNivelSenioridade(rs.getString("NIVEL_SENIORIDADE"));
@@ -80,7 +90,7 @@ public class UsuarioDAO {
     
     public boolean atualizar(Usuario usuario) {
         String sql = "UPDATE TB_SS_USUARIO "
-                + "SET ID_EMPRESA = ?, ID_DEPARTAMENTO = ?, NOME_USUARIO = ?, TIPO_USUARIO = ?, "
+                + "SET ID_EMPRESA = ?, ID_DEPARTAMENTO = ?, ID_TRILHA = ?, NOME_USUARIO = ?, TIPO_USUARIO = ?, "
                 + "NIVEL_SENIORIDADE = ?, COMPETENCIAS = ? "
                 + "WHERE ID_USUARIO = ?";
         
@@ -103,11 +113,17 @@ public class UsuarioDAO {
                 comandoDeAtualizacao.setNull(2, java.sql.Types.INTEGER);
             }
             
-            comandoDeAtualizacao.setString(3, usuario.getNomeUsuario());
-            comandoDeAtualizacao.setString(4, usuario.getTipoUsuario());
-            comandoDeAtualizacao.setString(5, usuario.getNivelSenioridade());
-            comandoDeAtualizacao.setString(6, usuario.getCompetencias());
-            comandoDeAtualizacao.setInt(7, usuario.getIdUsuario());
+            if (usuario.getIdTrilha() != null) {
+                comandoDeAtualizacao.setInt(3, usuario.getIdTrilha());
+            } else {
+                comandoDeAtualizacao.setNull(3, java.sql.Types.INTEGER);
+            }
+            
+            comandoDeAtualizacao.setString(4, usuario.getNomeUsuario());
+            comandoDeAtualizacao.setString(5, usuario.getTipoUsuario());
+            comandoDeAtualizacao.setString(6, usuario.getNivelSenioridade());
+            comandoDeAtualizacao.setString(7, usuario.getCompetencias());
+            comandoDeAtualizacao.setInt(8, usuario.getIdUsuario());
             
             int linhas = comandoDeAtualizacao.executeUpdate();
             return linhas > 0;
@@ -155,6 +171,10 @@ public class UsuarioDAO {
                         usuario.setIdDepartamento(rs.getInt("ID_DEPARTAMENTO"));
                     }
                     
+                    if (rs.getObject("ID_TRILHA") != null) {
+                        usuario.setIdTrilha(rs.getInt("ID_TRILHA"));
+                    }
+                    
                     usuario.setNomeUsuario(rs.getString("NOME_USUARIO"));
                     usuario.setTipoUsuario(rs.getString("TIPO_USUARIO"));
                     usuario.setNivelSenioridade(rs.getString("NIVEL_SENIORIDADE"));
@@ -192,6 +212,10 @@ public class UsuarioDAO {
                         usuario.setIdDepartamento(rs.getInt("ID_DEPARTAMENTO"));
                     }
                     
+                    if (rs.getObject("ID_TRILHA") != null) {
+                        usuario.setIdTrilha(rs.getInt("ID_TRILHA"));
+                    }
+                    
                     usuario.setNomeUsuario(rs.getString("NOME_USUARIO"));
                     usuario.setTipoUsuario(rs.getString("TIPO_USUARIO"));
                     usuario.setNivelSenioridade(rs.getString("NIVEL_SENIORIDADE"));
@@ -227,6 +251,10 @@ public class UsuarioDAO {
                     
                     if (rs.getObject("ID_DEPARTAMENTO") != null) {
                         usuario.setIdDepartamento(rs.getInt("ID_DEPARTAMENTO"));
+                    }
+                    
+                    if (rs.getObject("ID_TRILHA") != null) {
+                        usuario.setIdTrilha(rs.getInt("ID_TRILHA"));
                     }
                     
                     usuario.setNomeUsuario(rs.getString("NOME_USUARIO"));
@@ -347,6 +375,10 @@ public class UsuarioDAO {
                         usuario.setIdDepartamento(rs.getInt("ID_DEPARTAMENTO"));
                     }
                     
+                    if (rs.getObject("ID_TRILHA") != null) {
+                        usuario.setIdTrilha(rs.getInt("ID_TRILHA"));
+                    }
+                    
                     usuario.setNomeUsuario(rs.getString("NOME_USUARIO"));
                     usuario.setTipoUsuario(rs.getString("TIPO_USUARIO"));
                     usuario.setNivelSenioridade(rs.getString("NIVEL_SENIORIDADE"));
@@ -356,6 +388,71 @@ public class UsuarioDAO {
             }
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao buscar usuários por departamento", e);
+        }
+        
+        return usuarios;
+    }
+    
+    public boolean atualizarIdTrilha(Integer idUsuario, Integer idTrilha) {
+        String sql = "UPDATE TB_SS_USUARIO SET ID_TRILHA = ? WHERE ID_USUARIO = ?";
+        
+        if (!idExiste(idUsuario)) {
+            return false;
+        }
+        
+        try (Connection conexao = new ConnectionFactory().getConnection();
+             PreparedStatement st = conexao.prepareStatement(sql)) {
+            
+            if (idTrilha != null) {
+                st.setInt(1, idTrilha);
+            } else {
+                st.setNull(1, java.sql.Types.INTEGER);
+            }
+            
+            st.setInt(2, idUsuario);
+            
+            int linhas = st.executeUpdate();
+            return linhas > 0;
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao atualizar ID_TRILHA do usuário", e);
+        }
+    }
+    
+    public ArrayList<Usuario> buscarPorTrilha(Integer idTrilha) {
+        ArrayList<Usuario> usuarios = new ArrayList<>();
+        String sql = "SELECT * FROM TB_SS_USUARIO WHERE ID_TRILHA = ?";
+        
+        try (Connection conexao = new ConnectionFactory().getConnection();
+             PreparedStatement st = conexao.prepareStatement(sql)) {
+            
+            st.setInt(1, idTrilha);
+            
+            try (ResultSet rs = st.executeQuery()) {
+                while (rs.next()) {
+                    Usuario usuario = new Usuario();
+                    usuario.setIdUsuario(rs.getInt("ID_USUARIO"));
+                    
+                    if (rs.getObject("ID_EMPRESA") != null) {
+                        usuario.setIdEmpresa(rs.getInt("ID_EMPRESA"));
+                    }
+                    
+                    if (rs.getObject("ID_DEPARTAMENTO") != null) {
+                        usuario.setIdDepartamento(rs.getInt("ID_DEPARTAMENTO"));
+                    }
+                    
+                    if (rs.getObject("ID_TRILHA") != null) {
+                        usuario.setIdTrilha(rs.getInt("ID_TRILHA"));
+                    }
+                    
+                    usuario.setNomeUsuario(rs.getString("NOME_USUARIO"));
+                    usuario.setTipoUsuario(rs.getString("TIPO_USUARIO"));
+                    usuario.setNivelSenioridade(rs.getString("NIVEL_SENIORIDADE"));
+                    usuario.setCompetencias(rs.getString("COMPETENCIAS"));
+                    usuarios.add(usuario);
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao buscar usuários por trilha", e);
         }
         
         return usuarios;

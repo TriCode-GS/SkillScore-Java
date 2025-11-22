@@ -5,6 +5,7 @@ public class Usuario {
     private Integer idUsuario;
     private Integer idEmpresa;
     private Integer idDepartamento;
+    private Integer idTrilha;
     private String nomeUsuario;
     private String tipoUsuario;
     private String nivelSenioridade;
@@ -46,6 +47,14 @@ public class Usuario {
     
     public void setIdDepartamento(Integer idDepartamento) {
         this.idDepartamento = idDepartamento;
+    }
+    
+    public Integer getIdTrilha() {
+        return idTrilha;
+    }
+    
+    public void setIdTrilha(Integer idTrilha) {
+        this.idTrilha = idTrilha;
     }
     
     public String getNomeUsuario() {

@@ -4,9 +4,11 @@ import java.util.List;
 
 import br.com.skill.dao.DepartamentoDAO;
 import br.com.skill.dao.EmpresaDAO;
+import br.com.skill.dao.TrilhaDAO;
 import br.com.skill.dao.UsuarioDAO;
 import br.com.skill.model.Departamento;
 import br.com.skill.model.Empresa;
+import br.com.skill.model.Trilha;
 import br.com.skill.model.Usuario;
 
 public class UsuarioService {
@@ -16,6 +18,8 @@ public class UsuarioService {
     EmpresaDAO empresaDAO = new EmpresaDAO();
     
     DepartamentoDAO departamentoDAO = new DepartamentoDAO();
+    
+    TrilhaDAO trilhaDAO = new TrilhaDAO();
     
     public void salvar(Usuario usuario) {
         validarUsuario(usuario);
@@ -31,6 +35,13 @@ public class UsuarioService {
             Departamento departamento = departamentoDAO.buscarPorId(usuario.getIdDepartamento());
             if (departamento == null) {
                 throw new IllegalArgumentException("Departamento não encontrado");
+            }
+        }
+        
+        if (usuario.getIdTrilha() != null) {
+            Trilha trilha = trilhaDAO.buscarPorId(usuario.getIdTrilha());
+            if (trilha == null) {
+                throw new IllegalArgumentException("Trilha não encontrada");
             }
         }
         
@@ -56,6 +67,13 @@ public class UsuarioService {
             Departamento departamento = departamentoDAO.buscarPorId(usuario.getIdDepartamento());
             if (departamento == null) {
                 throw new IllegalArgumentException("Departamento não encontrado");
+            }
+        }
+        
+        if (usuario.getIdTrilha() != null) {
+            Trilha trilha = trilhaDAO.buscarPorId(usuario.getIdTrilha());
+            if (trilha == null) {
+                throw new IllegalArgumentException("Trilha não encontrada");
             }
         }
         
@@ -89,6 +107,10 @@ public class UsuarioService {
     
     public List<Usuario> buscarPorDepartamento(Integer idDepartamento) {
         return usuarioDAO.buscarPorDepartamento(idDepartamento);
+    }
+    
+    public List<Usuario> buscarPorTrilha(Integer idTrilha) {
+        return usuarioDAO.buscarPorTrilha(idTrilha);
     }
     
     public List<Usuario> buscarAdministradoresEmp() {
@@ -148,6 +170,41 @@ public class UsuarioService {
         boolean atualizado = usuarioDAO.atualizarIdDepartamento(idUsuario, idDepartamento);
         if (!atualizado) {
             throw new RuntimeException("Erro ao vincular gestor ao departamento");
+        }
+    }
+    
+    public void vincularTrilha(Integer idUsuario, Integer idTrilha) {
+        Usuario usuario = usuarioDAO.buscarPorId(idUsuario);
+        if (usuario == null) {
+            throw new IllegalArgumentException("Usuário não encontrado");
+        }
+        
+        if (idTrilha != null) {
+            Trilha trilha = trilhaDAO.buscarPorId(idTrilha);
+            if (trilha == null) {
+                throw new IllegalArgumentException("Trilha não encontrada");
+            }
+        }
+        
+        boolean atualizado = usuarioDAO.atualizarIdTrilha(idUsuario, idTrilha);
+        if (!atualizado) {
+            throw new RuntimeException("Erro ao vincular usuário à trilha");
+        }
+    }
+    
+    public void desvincularTrilha(Integer idUsuario) {
+        Usuario usuario = usuarioDAO.buscarPorId(idUsuario);
+        if (usuario == null) {
+            throw new IllegalArgumentException("Usuário não encontrado");
+        }
+        
+        if (usuario.getIdTrilha() == null) {
+            throw new IllegalStateException("Este usuário não está vinculado a nenhuma trilha");
+        }
+        
+        boolean atualizado = usuarioDAO.atualizarIdTrilha(idUsuario, null);
+        if (!atualizado) {
+            throw new RuntimeException("Erro ao desvincular usuário da trilha");
         }
     }
     

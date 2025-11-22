@@ -238,4 +238,22 @@ public class TrilhaDAO {
         
         return null;
     }
+    
+    public Integer obterUltimoIdTrilha() {
+        String sql = "SELECT MAX(ID_TRILHA) AS ULTIMO_ID FROM TB_SS_TRILHA";
+        
+        try (Connection conexao = new ConnectionFactory().getConnection();
+             PreparedStatement st = conexao.prepareStatement(sql)) {
+            
+            try (ResultSet rs = st.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("ULTIMO_ID");
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao obter último ID de trilha", e);
+        }
+        
+        return null;
+    }
 }

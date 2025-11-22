@@ -5,10 +5,8 @@ import java.util.List;
 import br.com.skill.dao.CursoDAO;
 import br.com.skill.dao.TrilhaCursoDAO;
 import br.com.skill.dao.TrilhaDAO;
-import br.com.skill.dao.UsuarioDAO;
 import br.com.skill.model.TrilhaCurso;
 import br.com.skill.model.TrilhaCursoCompleto;
-import br.com.skill.model.Usuario;
 
 public class TrilhaCursoService {
     
@@ -17,8 +15,6 @@ public class TrilhaCursoService {
     TrilhaDAO trilhaDAO = new TrilhaDAO();
     
     CursoDAO cursoDAO = new CursoDAO();
-    
-    UsuarioDAO usuarioDAO = new UsuarioDAO();
     
     public void salvar(TrilhaCurso trilhaCurso) {
         validarTrilhaCurso(trilhaCurso);
@@ -102,54 +98,6 @@ public class TrilhaCursoService {
         return trilhaCursoDAO.buscarPorCurso(idCurso);
     }
     
-    public List<TrilhaCurso> buscarPorStatusFase(String statusFase) {
-        return trilhaCursoDAO.buscarPorStatusFase(statusFase);
-    }
-    
-    public void atualizarStatusFase(Integer idTrilhaCurso, String statusFase, Integer idUsuario) {
-        if (idTrilhaCurso == null) {
-            throw new IllegalArgumentException("ID do TrilhaCurso é obrigatório");
-        }
-        
-        if (idUsuario == null) {
-            throw new IllegalArgumentException("ID do Usuário é obrigatório");
-        }
-        
-        TrilhaCurso trilhaCurso = trilhaCursoDAO.buscarPorId(idTrilhaCurso);
-        if (trilhaCurso == null) {
-            throw new IllegalArgumentException("TrilhaCurso não encontrado");
-        }
-        
-        // Valida se o TrilhaCurso pertence à trilha do usuário
-        Usuario usuario = usuarioDAO.buscarPorId(idUsuario);
-        if (usuario == null) {
-            throw new IllegalArgumentException("Usuário não encontrado");
-        }
-        
-        if (usuario.getIdTrilha() == null) {
-            throw new IllegalArgumentException("Usuário não está vinculado a nenhuma trilha");
-        }
-        
-        if (!usuario.getIdTrilha().equals(trilhaCurso.getIdTrilha())) {
-            throw new IllegalArgumentException("Este TrilhaCurso não pertence à trilha do usuário. O usuário está vinculado à trilha ID " + usuario.getIdTrilha() + ", mas o TrilhaCurso pertence à trilha ID " + trilhaCurso.getIdTrilha());
-        }
-        
-        if (statusFase == null || statusFase.trim().isEmpty()) {
-            throw new IllegalArgumentException("Status da fase é obrigatório");
-        }
-        
-        String statusFaseUpper = statusFase.toUpperCase().trim();
-        if (!statusFaseUpper.equals("EM ANDAMENTO") && 
-            !statusFaseUpper.equals("CONCLUIDA") && 
-            !statusFaseUpper.equals("NAO INICIADA")) {
-            throw new IllegalArgumentException("Status da fase inválido. Valores permitidos: EM ANDAMENTO, CONCLUIDA, NAO INICIADA");
-        }
-        
-        boolean atualizado = trilhaCursoDAO.atualizarStatusFase(idTrilhaCurso, statusFaseUpper);
-        if (!atualizado) {
-            throw new RuntimeException("Erro ao atualizar status da fase");
-        }
-    }
     
     private void validarTrilhaCurso(TrilhaCurso trilhaCurso) {
         if (trilhaCurso == null) {
@@ -163,16 +111,6 @@ public class TrilhaCursoService {
         
         if (trilhaCurso.getOrdemFase() == null || trilhaCurso.getOrdemFase() < 1) {
             throw new IllegalArgumentException("Ordem da fase deve ser maior que zero");
-        }
-        
-        if (trilhaCurso.getStatusFase() != null && !trilhaCurso.getStatusFase().trim().isEmpty()) {
-            String statusFaseUpper = trilhaCurso.getStatusFase().toUpperCase().trim();
-            if (!statusFaseUpper.equals("EM ANDAMENTO") && 
-                !statusFaseUpper.equals("CONCLUIDA") && 
-                !statusFaseUpper.equals("NAO INICIADA")) {
-                throw new IllegalArgumentException("Status da fase inválido. Valores permitidos: EM ANDAMENTO, CONCLUIDA, NAO INICIADA");
-            }
-            trilhaCurso.setStatusFase(statusFaseUpper);
         }
     }
 }

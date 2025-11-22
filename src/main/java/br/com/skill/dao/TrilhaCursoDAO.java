@@ -14,8 +14,8 @@ public class TrilhaCursoDAO {
     
     public void adicionar(TrilhaCurso trilhaCurso) {
         String sql = "INSERT INTO TB_SS_TRILHA_CURSO (ID_TRILHA_CURSO, ID_TRILHA, ID_CURSO, "
-                + "ORDEM_FASE, STATUS_FASE, DATA_CONCLUSAO) "
-                + "VALUES(SQ_SS_TRILHA_CURSO.NEXTVAL, ?, ?, ?, ?, ?)";
+                + "ORDEM_FASE, DATA_CONCLUSAO) "
+                + "VALUES(SQ_SS_TRILHA_CURSO.NEXTVAL, ?, ?, ?, ?)";
         
         try (Connection conexao = new ConnectionFactory().getConnection();
              PreparedStatement comandoDeInsercao = conexao.prepareStatement(sql)) {
@@ -23,12 +23,11 @@ public class TrilhaCursoDAO {
             comandoDeInsercao.setInt(1, trilhaCurso.getIdTrilha());
             comandoDeInsercao.setInt(2, trilhaCurso.getIdCurso());
             comandoDeInsercao.setInt(3, trilhaCurso.getOrdemFase());
-            comandoDeInsercao.setString(4, trilhaCurso.getStatusFase());
             
             if (trilhaCurso.getDataConclusao() != null) {
-                comandoDeInsercao.setObject(5, trilhaCurso.getDataConclusao());
+                comandoDeInsercao.setObject(4, trilhaCurso.getDataConclusao());
             } else {
-                comandoDeInsercao.setNull(5, Types.DATE);
+                comandoDeInsercao.setNull(4, Types.DATE);
             }
             
             comandoDeInsercao.execute();
@@ -55,7 +54,6 @@ public class TrilhaCursoDAO {
                 trilhaCurso.setIdCurso(rs.getInt("ID_CURSO"));
                 
                 trilhaCurso.setOrdemFase(rs.getInt("ORDEM_FASE"));
-                trilhaCurso.setStatusFase(rs.getString("STATUS_FASE"));
                 
                 if (rs.getObject("DATA_CONCLUSAO") != null) {
                     trilhaCurso.setDataConclusao(rs.getObject("DATA_CONCLUSAO", LocalDate.class));
@@ -74,7 +72,7 @@ public class TrilhaCursoDAO {
     
     public boolean atualizar(TrilhaCurso trilhaCurso) {
         String sql = "UPDATE TB_SS_TRILHA_CURSO "
-                + "SET ID_TRILHA = ?, ID_CURSO = ?, ORDEM_FASE = ?, STATUS_FASE = ?, DATA_CONCLUSAO = ? "
+                + "SET ID_TRILHA = ?, ID_CURSO = ?, ORDEM_FASE = ?, DATA_CONCLUSAO = ? "
                 + "WHERE ID_TRILHA_CURSO = ?";
         
         try (Connection conexao = new ConnectionFactory().getConnection();
@@ -87,15 +85,14 @@ public class TrilhaCursoDAO {
             comandoDeAtualizacao.setInt(1, trilhaCurso.getIdTrilha());
             comandoDeAtualizacao.setInt(2, trilhaCurso.getIdCurso());
             comandoDeAtualizacao.setInt(3, trilhaCurso.getOrdemFase());
-            comandoDeAtualizacao.setString(4, trilhaCurso.getStatusFase());
             
             if (trilhaCurso.getDataConclusao() != null) {
-                comandoDeAtualizacao.setObject(5, trilhaCurso.getDataConclusao());
+                comandoDeAtualizacao.setObject(4, trilhaCurso.getDataConclusao());
             } else {
-                comandoDeAtualizacao.setNull(5, Types.DATE);
+                comandoDeAtualizacao.setNull(4, Types.DATE);
             }
             
-            comandoDeAtualizacao.setInt(6, trilhaCurso.getIdTrilhaCurso());
+            comandoDeAtualizacao.setInt(5, trilhaCurso.getIdTrilhaCurso());
             
             int linhas = comandoDeAtualizacao.executeUpdate();
             return linhas > 0;
@@ -139,7 +136,6 @@ public class TrilhaCursoDAO {
                     trilhaCurso.setIdCurso(rs.getInt("ID_CURSO"));
                     
                     trilhaCurso.setOrdemFase(rs.getInt("ORDEM_FASE"));
-                    trilhaCurso.setStatusFase(rs.getString("STATUS_FASE"));
                     
                     if (rs.getObject("DATA_CONCLUSAO") != null) {
                         trilhaCurso.setDataConclusao(rs.getObject("DATA_CONCLUSAO", LocalDate.class));
@@ -173,7 +169,6 @@ public class TrilhaCursoDAO {
                     trilhaCurso.setIdCurso(rs.getInt("ID_CURSO"));
                     
                     trilhaCurso.setOrdemFase(rs.getInt("ORDEM_FASE"));
-                    trilhaCurso.setStatusFase(rs.getString("STATUS_FASE"));
                     
                     if (rs.getObject("DATA_CONCLUSAO") != null) {
                         trilhaCurso.setDataConclusao(rs.getObject("DATA_CONCLUSAO", LocalDate.class));
@@ -211,7 +206,6 @@ public class TrilhaCursoDAO {
                     trilhaCurso.setIdCurso(rs.getInt("ID_CURSO"));
                     
                     trilhaCurso.setOrdemFase(rs.getInt("ORDEM_FASE"));
-                    trilhaCurso.setStatusFase(rs.getString("STATUS_FASE"));
                     
                     if (rs.getObject("DATA_CONCLUSAO") != null) {
                         trilhaCurso.setDataConclusao(rs.getObject("DATA_CONCLUSAO", LocalDate.class));
@@ -227,44 +221,11 @@ public class TrilhaCursoDAO {
         return trilhaCursos;
     }
     
-    public ArrayList<TrilhaCurso> buscarPorStatusFase(String statusFase) {
-        ArrayList<TrilhaCurso> trilhaCursos = new ArrayList<>();
-        String sql = "SELECT * FROM TB_SS_TRILHA_CURSO WHERE STATUS_FASE = ?";
-        
-        try (Connection conexao = new ConnectionFactory().getConnection();
-             PreparedStatement st = conexao.prepareStatement(sql)) {
-            
-            st.setString(1, statusFase);
-            
-            try (ResultSet rs = st.executeQuery()) {
-                while (rs.next()) {
-                    TrilhaCurso trilhaCurso = new TrilhaCurso();
-                    trilhaCurso.setIdTrilhaCurso(rs.getInt("ID_TRILHA_CURSO"));
-                    
-                    trilhaCurso.setIdTrilha(rs.getInt("ID_TRILHA"));
-                    trilhaCurso.setIdCurso(rs.getInt("ID_CURSO"));
-                    
-                    trilhaCurso.setOrdemFase(rs.getInt("ORDEM_FASE"));
-                    trilhaCurso.setStatusFase(rs.getString("STATUS_FASE"));
-                    
-                    if (rs.getObject("DATA_CONCLUSAO") != null) {
-                        trilhaCurso.setDataConclusao(rs.getObject("DATA_CONCLUSAO", LocalDate.class));
-                    }
-                    
-                    trilhaCursos.add(trilhaCurso);
-                }
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException("Erro ao buscar trilha-cursos por status", e);
-        }
-        
-        return trilhaCursos;
-    }
     
     public ArrayList<TrilhaCursoCompleto> buscarPorTrilhaComDadosCurso(Integer idTrilha) {
         ArrayList<TrilhaCursoCompleto> trilhaCursosCompletos = new ArrayList<>();
         String sql = "SELECT tc.ID_TRILHA_CURSO, tc.ID_TRILHA, tc.ID_CURSO, tc.ORDEM_FASE, " +
-                     "tc.STATUS_FASE, tc.DATA_CONCLUSAO, " +
+                     "tc.DATA_CONCLUSAO, " +
                      "c.TITULO, c.DESCRICAO, c.LINK_CURSO, c.AREA_RELACIONADA, " +
                      "c.NIVEL_RECOMENDADO, c.DURACAO_HORAS " +
                      "FROM TB_SS_TRILHA_CURSO tc " +
@@ -285,7 +246,8 @@ public class TrilhaCursoDAO {
                     trilhaCursoCompleto.setIdTrilha(rs.getInt("ID_TRILHA"));
                     trilhaCursoCompleto.setIdCurso(rs.getInt("ID_CURSO"));
                     trilhaCursoCompleto.setOrdemFase(rs.getInt("ORDEM_FASE"));
-                    trilhaCursoCompleto.setStatusFase(rs.getString("STATUS_FASE"));
+                    // StatusFase não vem mais da tabela TB_SS_TRILHA_CURSO
+                    // Deve ser buscado da tabela TB_SS_USUARIO_TRILHA_CURSO
                     
                     if (rs.getObject("DATA_CONCLUSAO") != null) {
                         trilhaCursoCompleto.setDataConclusao(rs.getObject("DATA_CONCLUSAO", LocalDate.class));
@@ -306,26 +268,6 @@ public class TrilhaCursoDAO {
         }
         
         return trilhaCursosCompletos;
-    }
-    
-    public boolean atualizarStatusFase(Integer idTrilhaCurso, String statusFase) {
-        String sql = "UPDATE TB_SS_TRILHA_CURSO SET STATUS_FASE = ? WHERE ID_TRILHA_CURSO = ?";
-        
-        if (!idExiste(idTrilhaCurso)) {
-            return false;
-        }
-        
-        try (Connection conexao = new ConnectionFactory().getConnection();
-             PreparedStatement st = conexao.prepareStatement(sql)) {
-            
-            st.setString(1, statusFase);
-            st.setInt(2, idTrilhaCurso);
-            
-            int linhas = st.executeUpdate();
-            return linhas > 0;
-        } catch (SQLException e) {
-            throw new RuntimeException("Erro ao atualizar status da fase", e);
-        }
     }
     
     public boolean idExiste(Integer idTrilhaCurso) {

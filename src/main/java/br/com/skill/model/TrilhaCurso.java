@@ -8,19 +8,17 @@ public class TrilhaCurso {
     private Integer idTrilha;
     private Integer idCurso;
     private Integer ordemFase;
-    private String statusFase;
     private LocalDate dataConclusao;
     
     public TrilhaCurso() {
     }
     
     public TrilhaCurso(Integer idTrilhaCurso, Integer idTrilha, Integer idCurso, Integer ordemFase, 
-                       String statusFase, LocalDate dataConclusao) {
+                       LocalDate dataConclusao) {
         this.idTrilhaCurso = idTrilhaCurso;
         this.idTrilha = idTrilha;
         this.idCurso = idCurso;
         this.ordemFase = ordemFase;
-        this.statusFase = statusFase;
         this.dataConclusao = dataConclusao;
     }
     
@@ -54,14 +52,6 @@ public class TrilhaCurso {
     
     public void setOrdemFase(Integer ordemFase) {
         this.ordemFase = ordemFase;
-    }
-    
-    public String getStatusFase() {
-        return statusFase;
-    }
-    
-    public void setStatusFase(String statusFase) {
-        this.statusFase = statusFase;
     }
     
     public LocalDate getDataConclusao() {

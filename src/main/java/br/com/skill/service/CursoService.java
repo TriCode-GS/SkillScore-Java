@@ -71,8 +71,8 @@ public class CursoService {
             throw new IllegalArgumentException("Título do curso deve ter no máximo 100 caracteres");
         }
         
-        if (curso.getDescricao() != null && curso.getDescricao().length() > 300) {
-            throw new IllegalArgumentException("Descrição do curso deve ter no máximo 300 caracteres");
+        if (curso.getDescricao() != null && curso.getDescricao().length() > 600) {
+            throw new IllegalArgumentException("Descrição do curso deve ter no máximo 600 caracteres");
         }
     }
 }

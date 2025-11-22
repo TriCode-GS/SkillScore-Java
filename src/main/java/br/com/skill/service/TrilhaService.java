@@ -59,10 +59,6 @@ public class TrilhaService {
         return trilhaDAO.obterTodasTrilhas();
     }
     
-    public List<Trilha> buscarPorStatus(String status) {
-        return trilhaDAO.buscarPorStatus(status);
-    }
-    
     public List<Trilha> buscarPorNome(String nomeTrilha) {
         return trilhaDAO.buscarPorNome(nomeTrilha);
     }
@@ -80,14 +76,8 @@ public class TrilhaService {
             throw new IllegalArgumentException("Nome da trilha deve ter no máximo 50 caracteres");
         }
         
-        if (trilha.getStatus() != null && !trilha.getStatus().trim().isEmpty()) {
-            String statusUpper = trilha.getStatus().toUpperCase().trim();
-            if (!statusUpper.equals("EM ANDAMENTO") && 
-                !statusUpper.equals("CONCLUIDA") && 
-                !statusUpper.equals("NAO INICIADA")) {
-                throw new IllegalArgumentException("Status inválido. Valores permitidos: EM ANDAMENTO, CONCLUIDA, NAO INICIADA");
-            }
-            trilha.setStatus(statusUpper);
+        if (trilha.getNumFases() != null && trilha.getNumFases() < 1) {
+            throw new IllegalArgumentException("Número de fases deve ser maior que zero");
         }
     }
 }

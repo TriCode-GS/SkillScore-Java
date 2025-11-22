@@ -12,7 +12,7 @@ import java.util.ArrayList;
 public class TrilhaDAO {
     
     public void adicionar(Trilha trilha) {
-        String sql = "INSERT INTO TB_SS_TRILHA (ID_TRILHA, NOME_TRILHA, DATA_CRIACAO, STATUS) "
+        String sql = "INSERT INTO TB_SS_TRILHA (ID_TRILHA, NOME_TRILHA, DATA_CRIACAO, NUM_FASES) "
                 + "VALUES(SQ_SS_TRILHA.NEXTVAL, ?, ?, ?)";
         
         try (Connection conexao = new ConnectionFactory().getConnection();
@@ -26,7 +26,11 @@ public class TrilhaDAO {
                 comandoDeInsercao.setNull(2, Types.DATE);
             }
             
-            comandoDeInsercao.setString(3, trilha.getStatus());
+            if (trilha.getNumFases() != null) {
+                comandoDeInsercao.setInt(3, trilha.getNumFases());
+            } else {
+                comandoDeInsercao.setNull(3, Types.INTEGER);
+            }
             
             comandoDeInsercao.execute();
         } catch (SQLException e) {
@@ -55,7 +59,9 @@ public class TrilhaDAO {
                     trilha.setDataCriacao(rs.getObject("DATA_CRIACAO", LocalDate.class));
                 }
                 
-                trilha.setStatus(rs.getString("STATUS"));
+                if (rs.getObject("NUM_FASES") != null) {
+                    trilha.setNumFases(rs.getInt("NUM_FASES"));
+                }
                 trilhas.add(trilha);
             }
             
@@ -69,7 +75,7 @@ public class TrilhaDAO {
     
     public boolean atualizar(Trilha trilha) {
         String sql = "UPDATE TB_SS_TRILHA "
-                + "SET NOME_TRILHA = ?, DATA_CRIACAO = ?, STATUS = ? "
+                + "SET NOME_TRILHA = ?, DATA_CRIACAO = ?, NUM_FASES = ? "
                 + "WHERE ID_TRILHA = ?";
         
         try (Connection conexao = new ConnectionFactory().getConnection();
@@ -87,7 +93,11 @@ public class TrilhaDAO {
                 comandoDeAtualizacao.setNull(2, Types.DATE);
             }
             
-            comandoDeAtualizacao.setString(3, trilha.getStatus());
+            if (trilha.getNumFases() != null) {
+                comandoDeAtualizacao.setInt(3, trilha.getNumFases());
+            } else {
+                comandoDeAtualizacao.setNull(3, Types.INTEGER);
+            }
             comandoDeAtualizacao.setInt(4, trilha.getIdTrilha());
             
             int linhas = comandoDeAtualizacao.executeUpdate();
@@ -135,7 +145,9 @@ public class TrilhaDAO {
                         trilha.setDataCriacao(rs.getObject("DATA_CRIACAO", LocalDate.class));
                     }
                     
-                    trilha.setStatus(rs.getString("STATUS"));
+                    if (rs.getObject("NUM_FASES") != null) {
+                        trilha.setNumFases(rs.getInt("NUM_FASES"));
+                    }
                     return trilha;
                 }
             }
@@ -144,38 +156,6 @@ public class TrilhaDAO {
         }
         
         return null;
-    }
-    
-    public ArrayList<Trilha> buscarPorStatus(String status) {
-        ArrayList<Trilha> trilhas = new ArrayList<>();
-        String sql = "SELECT * FROM TB_SS_TRILHA WHERE STATUS = ?";
-        
-        try (Connection conexao = new ConnectionFactory().getConnection();
-             PreparedStatement st = conexao.prepareStatement(sql)) {
-            
-            st.setString(1, status);
-            
-            try (ResultSet rs = st.executeQuery()) {
-                while (rs.next()) {
-                    Trilha trilha = new Trilha();
-                    trilha.setIdTrilha(rs.getInt("ID_TRILHA"));
-                    
-                    
-                    trilha.setNomeTrilha(rs.getString("NOME_TRILHA"));
-                    
-                    if (rs.getObject("DATA_CRIACAO") != null) {
-                        trilha.setDataCriacao(rs.getObject("DATA_CRIACAO", LocalDate.class));
-                    }
-                    
-                    trilha.setStatus(rs.getString("STATUS"));
-                    trilhas.add(trilha);
-                }
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException("Erro ao buscar trilhas por status", e);
-        }
-        
-        return trilhas;
     }
     
     public ArrayList<Trilha> buscarPorNome(String nomeTrilha) {
@@ -199,7 +179,9 @@ public class TrilhaDAO {
                         trilha.setDataCriacao(rs.getObject("DATA_CRIACAO", LocalDate.class));
                     }
                     
-                    trilha.setStatus(rs.getString("STATUS"));
+                    if (rs.getObject("NUM_FASES") != null) {
+                        trilha.setNumFases(rs.getInt("NUM_FASES"));
+                    }
                     trilhas.add(trilha);
                 }
             }
@@ -244,7 +226,9 @@ public class TrilhaDAO {
                         trilha.setDataCriacao(rs.getObject("DATA_CRIACAO", LocalDate.class));
                     }
                     
-                    trilha.setStatus(rs.getString("STATUS"));
+                    if (rs.getObject("NUM_FASES") != null) {
+                        trilha.setNumFases(rs.getInt("NUM_FASES"));
+                    }
                     return trilha;
                 }
             }

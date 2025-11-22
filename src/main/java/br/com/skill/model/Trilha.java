@@ -7,16 +7,16 @@ public class Trilha {
     private Integer idTrilha;
     private String nomeTrilha;
     private LocalDate dataCriacao;
-    private String status;
+    private Integer numFases;
     
     public Trilha() {
     }
     
-    public Trilha(Integer idTrilha, String nomeTrilha, LocalDate dataCriacao, String status) {
+    public Trilha(Integer idTrilha, String nomeTrilha, LocalDate dataCriacao, Integer numFases) {
         this.idTrilha = idTrilha;
         this.nomeTrilha = nomeTrilha;
         this.dataCriacao = dataCriacao;
-        this.status = status;
+        this.numFases = numFases;
     }
     
     public Integer getIdTrilha() {
@@ -43,11 +43,11 @@ public class Trilha {
         this.dataCriacao = dataCriacao;
     }
     
-    public String getStatus() {
-        return status;
+    public Integer getNumFases() {
+        return numFases;
     }
     
-    public void setStatus(String status) {
-        this.status = status;
+    public void setNumFases(Integer numFases) {
+        this.numFases = numFases;
     }
 }

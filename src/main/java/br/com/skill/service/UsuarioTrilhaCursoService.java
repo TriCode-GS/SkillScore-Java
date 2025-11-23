@@ -145,19 +145,16 @@ public class UsuarioTrilhaCursoService {
             throw new IllegalArgumentException("ID do TrilhaCurso é obrigatório");
         }
         
-        // Valida se o usuário existe
         Usuario usuario = usuarioDAO.buscarPorId(idUsuario);
         if (usuario == null) {
             throw new IllegalArgumentException("Usuário não encontrado");
         }
         
-        // Valida se o trilha-curso existe
         TrilhaCurso trilhaCurso = trilhaCursoDAO.buscarPorId(idTrilhaCurso);
         if (trilhaCurso == null) {
             throw new IllegalArgumentException("TrilhaCurso não encontrado");
         }
         
-        // Valida se o trilha-curso pertence à trilha do usuário
         if (usuario.getIdTrilha() == null) {
             throw new IllegalArgumentException("Usuário não está vinculado a nenhuma trilha");
         }
@@ -177,18 +174,15 @@ public class UsuarioTrilhaCursoService {
             throw new IllegalArgumentException("Status da fase inválido. Valores permitidos: EM ANDAMENTO, CONCLUIDA, NAO INICIADA");
         }
         
-        // Busca ou cria o registro
         UsuarioTrilhaCurso usuarioTrilhaCurso = usuarioTrilhaCursoDAO.buscarPorUsuarioETrilhaCurso(idUsuario, idTrilhaCurso);
         
         if (usuarioTrilhaCurso == null) {
-            // Cria novo registro se não existir
             usuarioTrilhaCurso = new UsuarioTrilhaCurso();
             usuarioTrilhaCurso.setIdUsuario(idUsuario);
             usuarioTrilhaCurso.setIdTrilhaCurso(idTrilhaCurso);
             usuarioTrilhaCurso.setStatusFase(statusFaseUpper);
             usuarioTrilhaCursoDAO.adicionar(usuarioTrilhaCurso);
         } else {
-            // Atualiza o registro existente
             boolean atualizado = usuarioTrilhaCursoDAO.atualizarStatusFasePorUsuarioETrilhaCurso(idUsuario, idTrilhaCurso, statusFaseUpper);
             if (!atualizado) {
                 throw new RuntimeException("Erro ao atualizar status da fase");

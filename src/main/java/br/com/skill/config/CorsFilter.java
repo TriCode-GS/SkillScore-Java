@@ -23,7 +23,7 @@ public class CorsFilter implements ContainerRequestFilter, ContainerResponseFilt
         "http://127.0.0.1:5174",
         "http://127.0.0.1:5175",
         "http://localhost:8000",
-        "https://skillscore.vercel.app",
+        "https://skillscore-tri-code.vercel.app",
         "https://skillscore-java.onrender.com"
     );
 

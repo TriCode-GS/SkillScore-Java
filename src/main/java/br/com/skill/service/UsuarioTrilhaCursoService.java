@@ -2,12 +2,12 @@ package br.com.skill.service;
 
 import java.util.List;
 
-import br.com.skill.dao.UsuarioTrilhaCursoDAO;
-import br.com.skill.dao.UsuarioDAO;
 import br.com.skill.dao.TrilhaCursoDAO;
-import br.com.skill.model.UsuarioTrilhaCurso;
-import br.com.skill.model.Usuario;
+import br.com.skill.dao.UsuarioDAO;
+import br.com.skill.dao.UsuarioTrilhaCursoDAO;
 import br.com.skill.model.TrilhaCurso;
+import br.com.skill.model.Usuario;
+import br.com.skill.model.UsuarioTrilhaCurso;
 
 public class UsuarioTrilhaCursoService {
     
@@ -28,7 +28,6 @@ public class UsuarioTrilhaCursoService {
             throw new IllegalArgumentException("Já existe um registro para este usuário e trilha-curso. Use atualizar ao invés de salvar.");
         }
         
-        // Valida se o usuário existe
         Usuario usuario = usuarioDAO.buscarPorId(usuarioTrilhaCurso.getIdUsuario());
         if (usuario == null) {
             throw new IllegalArgumentException("Usuário não encontrado");
